@@ -36,7 +36,7 @@ public class PaisResouce {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Pais>> buscaPorCodigo() {
+	public ResponseEntity<List<Pais>> listarTodos() {
 		List<Pais> lista = service.listAll();
 		return lista.size()>0  ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
 	}
