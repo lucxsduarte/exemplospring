@@ -44,5 +44,15 @@ public class UserServiceImpl implements UserService{
 			repository.delete(user);
 		}
 	}
+
+	@Override
+	public List<User> findByNameIgnoreCase(String name) {
+		return repository.findByNameIgnoreCase(name);
+	}
+	
+	@Override
+	public List<User> findByNameEndsWith(String name) {
+		return repository.findByNameEndsWith(name);
+	}
 	
 }

@@ -15,4 +15,8 @@ public interface UserService {
 	User update(User user);
 	
 	void delete(Integer id);
+	
+	List<User> findByNameIgnoreCase(String name);
+	
+	List<User> findByNameEndsWith(String name);
 }

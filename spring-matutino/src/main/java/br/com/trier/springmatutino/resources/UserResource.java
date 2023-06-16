@@ -38,7 +38,7 @@ public class UserResource {
 	@GetMapping
 	public ResponseEntity<List<User>> listarTodos() {
 		List<User> lista = service.listAll();
-		return lista.size()>0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/{id}")
@@ -52,6 +52,18 @@ public class UserResource {
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.delete(id);
 		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/name/{name}")
+	public ResponseEntity<List<User>> buscaPorNome(@PathVariable String name){
+		List<User> lista = service.findByNameIgnoreCase(name);
+		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping("/name/termina/{name}")
+	public ResponseEntity<List<User>> buscaPorNomeTerminaCom(@PathVariable String name){
+		List<User> lista = service.findByNameEndsWith(name);
+		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
 	}
 	
 }

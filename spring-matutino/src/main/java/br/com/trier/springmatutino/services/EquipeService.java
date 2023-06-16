@@ -16,4 +16,8 @@ public interface EquipeService {
 	
 	void delete(Integer id);
 	
+	List<Equipe> findByNameIgnoreCase(String name);
+	
+	List<Equipe> findByNameContains(String name);
+	
 }

@@ -25,5 +25,5 @@ public class Equipe {
 	private Integer id;
 	
 	@Column (name = "nome_equipe", unique = true)
-	private String nome;
+	private String name;
 }

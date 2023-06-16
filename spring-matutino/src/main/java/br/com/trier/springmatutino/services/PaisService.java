@@ -3,6 +3,7 @@ package br.com.trier.springmatutino.services;
 import java.util.List;
 
 import br.com.trier.springmatutino.domain.Pais;
+import br.com.trier.springmatutino.domain.User;
 
 public interface PaisService {
 
@@ -15,5 +16,9 @@ public interface PaisService {
 	Pais update(Pais pais);
 	
 	void delete(Integer id);
+	
+	List<Pais> findByNameIgnoreCase(String name);
+	
+	List<Pais> findByNameContains(String name);
 	
 }
