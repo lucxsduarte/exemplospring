@@ -15,18 +15,22 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode (of = "id")
-@Entity(name = "camp" )
-public class Campeonato {
+@Entity (name = "corrida")
+public class Corrida {
 	
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
-	@Column (name = "id_camp")
+	@Column (name = "id_corrida")
 	@Setter
 	private Integer id;
 	
-	@Column (name = "desc_camp")
-	private String description;
+	//@Column (name = "data_corrida")
+	//private LocalDate data;
 	
-	@Column (name = "ano_camp")
-	private Integer ano;
+	@Column (name = "pista_corrida")
+	private Integer pista;
+	
+	@Column (name = "camp_corrida")
+	private Integer campeonato;
+	
 }

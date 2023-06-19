@@ -44,8 +44,8 @@ public class EquipeResource {
 	@PutMapping ("/{id}")
 	public ResponseEntity<Equipe> update(@PathVariable Integer id, @RequestBody Equipe equipe){
 		equipe.setId(id);
-		equipe = service.salvar(equipe);
-		return equipe != null ? ResponseEntity.ok(equipe) : ResponseEntity.noContent().build();
+		equipe = service.update(equipe);
+		return equipe != null ? ResponseEntity.ok(equipe) : ResponseEntity.badRequest().build();
 	}
 	
 	@DeleteMapping ("/{id}")
@@ -54,4 +54,15 @@ public class EquipeResource {
 		return ResponseEntity.ok().build();
 	}
 	
+	@GetMapping ("/name/{name}")
+	public ResponseEntity<List<Equipe>> buscaPorNome(@PathVariable String name) {
+		List<Equipe> lista = service.findByNameIgnoreCase(name);
+		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping ("/name/contem/{name}")
+	public ResponseEntity<List<Equipe>> buscaPorNomeContem(@PathVariable String name) {
+		List<Equipe> lista = service.findByNameContains(name);
+		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	}
 }

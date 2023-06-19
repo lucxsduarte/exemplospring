@@ -12,21 +12,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode (of = "id")
-@Entity(name = "camp" )
-public class Campeonato {
+@Entity (name = "piloto")
+public class Piloto {
 	
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
-	@Column (name = "id_camp")
+	@Column (name = "id_piloto")
 	@Setter
 	private Integer id;
 	
-	@Column (name = "desc_camp")
-	private String description;
+	@Column (name = "name_piloto")
+	private String name;
 	
-	@Column (name = "ano_camp")
-	private Integer ano;
+	@Column (name = "pais_piloto")
+	private Integer pais;
+	
+	@Column (name = "equipe_piloto")
+	private Integer equipe;
 }

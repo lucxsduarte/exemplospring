@@ -3,7 +3,6 @@ package br.com.trier.springmatutino.services;
 import java.util.List;
 
 import br.com.trier.springmatutino.domain.Pais;
-import br.com.trier.springmatutino.domain.User;
 
 public interface PaisService {
 

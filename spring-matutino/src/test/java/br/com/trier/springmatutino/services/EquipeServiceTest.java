@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
 import br.com.trier.springmatutino.BaseTests;
+import br.com.trier.springmatutino.domain.Equipe;
 import jakarta.transaction.Transactional;
 
 @Transactional
@@ -47,4 +48,52 @@ public class EquipeServiceTest extends BaseTests{
 		assertEquals(0, lista.size());
 	}
 
+	@Test
+	@DisplayName ("Teste lista todos")
+	@Sql({"classpath:/resources/sqls/equipe.sql"})
+	void listAllTest() {
+		var lista = equipeService.listAll();
+		assertEquals(4, lista.size());
+	}
+	
+	@Test
+	@DisplayName ("Teste cadastra equipe")
+	void salvarEquipeTest() {
+		var equipe = equipeService.salvar(new Equipe(null, "Equipe Nova"));
+		var lista = equipeService.listAll();
+		var equipeNova = equipeService.findById(1);
+		assertEquals("Equipe Nova", lista.get(0).getName());
+		assertEquals("Equipe Nova", equipeNova.getName());
+		assertEquals(1, lista.size());
+	}
+	
+	@Test
+	@DisplayName ("Teste update equipe")
+	@Sql({"classpath:/resources/sqls/equipe.sql"})
+	void updateEquipeTest() {
+		var equipe = equipeService.update(new Equipe(1, "Equipe Nova"));
+		var lista = equipeService.listAll();
+		var equipeNova = equipeService.findById(1);
+		assertEquals(1, lista.get(0).getId());
+		assertEquals("Equipe Nova", lista.get(0).getName());
+		assertEquals(4, lista.size());
+	}
+	
+	@Test
+	@DisplayName ("Teste deleta equipe")
+	@Sql({"classpath:/resources/sqls/equipe.sql"})
+	void deleteEquipeTest() {
+		equipeService.delete(1);
+		var lista = equipeService.listAll();
+		assertEquals(3, lista.size());
+	}
+	
+	@Test
+	@DisplayName ("Teste deleta equipe não existente")
+	@Sql({"classpath:/resources/sqls/equipe.sql"})
+	void deleteEquipeNonExistentTest() {
+		equipeService.delete(5);
+		var lista = equipeService.listAll();
+		assertEquals(4, lista.size());
+	}
 }

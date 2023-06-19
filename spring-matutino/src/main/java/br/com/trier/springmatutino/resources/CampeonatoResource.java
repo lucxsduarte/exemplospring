@@ -38,7 +38,7 @@ public class CampeonatoResource {
 	@GetMapping
 	public ResponseEntity<List<Campeonato>> listarTodos() {
 		List<Campeonato> lista = service.listAll();
-		return lista.size()>0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/{id}")
@@ -53,5 +53,31 @@ public class CampeonatoResource {
 		service.delete(id);
 		return ResponseEntity.ok().build();
 	}
+	
+	
+	@GetMapping("/ano/{ano}")
+	public ResponseEntity<List<Campeonato>> buscarPorAno(@PathVariable Integer ano) {
+		List<Campeonato> lista = service.findByAno(ano);
+		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping("/ano/entre/{ano1}/{ano2}")
+	public ResponseEntity<List<Campeonato>> buscaPorAnoEntre(@PathVariable Integer ano1, @PathVariable Integer ano2) {
+		List<Campeonato> lista = service.findByAnoBetween(ano1, ano2);
+		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping ("/desc/{description}")
+	public ResponseEntity<List<Campeonato>> buscaPorDescription(@PathVariable String description) {
+		List<Campeonato> lista = service.findByDescriptionIgnoreCase(description);
+		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping ("/desc/contem/{description}")
+	public ResponseEntity<List<Campeonato>> buscaPorDescriptionComtem(@PathVariable String description) {
+		List<Campeonato> lista = service.findByDescriptionContains(description);
+		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	}
+
 
 }
