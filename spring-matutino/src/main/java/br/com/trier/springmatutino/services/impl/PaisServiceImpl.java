@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import br.com.trier.springmatutino.domain.Pais;
 import br.com.trier.springmatutino.repositories.PaisRepository;
 import br.com.trier.springmatutino.services.PaisService;
+import br.com.trier.springmatutino.services.exceptions.ObjetoNaoEncontrado;
+import br.com.trier.springmatutino.services.exceptions.ViolacaoIntegridade;
 
 @Service
 public class PaisServiceImpl implements PaisService{
@@ -18,22 +20,29 @@ public class PaisServiceImpl implements PaisService{
 	
 	@Override
 	public Pais salvar(Pais pais) {
+		findByname(pais);
 		return repository.save(pais);
 	}
 
 	@Override
 	public List<Pais> listAll() {
-		return repository.findAll();
+		List<Pais> lista = repository.findAll();
+		if (lista.size() == 0) {
+			throw new ObjetoNaoEncontrado("Nenhum pais encontrado");
+		}
+		return lista;
 	}
 
 	@Override
 	public Pais findById(Integer id) {
 		Optional<Pais> pais = repository.findById(id);
-		return pais.orElse(null);
+		return pais.orElseThrow(() -> new ObjetoNaoEncontrado("Pais %s não encontrado".formatted(id)));
 	}
 
 	@Override
 	public Pais update(Pais pais) {
+		findById(pais.getId());
+		findByname(pais);
 		return repository.save(pais);
 	}
 
@@ -42,6 +51,13 @@ public class PaisServiceImpl implements PaisService{
 		Pais pais = findById(id);
 		if (pais != null) {
 			repository.delete(pais);
+		}
+	}
+	
+	private void findByname (Pais pais) {
+		Pais paisNovo = repository.findByName(pais.getName());
+		if( paisNovo != null && paisNovo.getId() != pais.getId()) {
+			throw new ViolacaoIntegridade("Pais já cadastrado: %s".formatted(pais.getName()));
 		}
 	}
 

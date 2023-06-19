@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -36,7 +35,7 @@ public class EquipeServiceTest extends BaseTests{
 		var lista = equipeService.findByNameIgnoreCase("Mercedes");
 		assertEquals(1, lista.size());
 		assertEquals("Mercedes", lista.get(0).getName());
-		lista = equipeService.findByNameContains("e");
+		lista = equipeService.findByNameContainsIgnoreCase("e");
 		assertEquals(3, lista.size());
 	}
 	
@@ -59,7 +58,7 @@ public class EquipeServiceTest extends BaseTests{
 	@Test
 	@DisplayName ("Teste cadastra equipe")
 	void salvarEquipeTest() {
-		var equipe = equipeService.salvar(new Equipe(null, "Equipe Nova"));
+		equipeService.salvar(new Equipe(null, "Equipe Nova"));
 		var lista = equipeService.listAll();
 		var equipeNova = equipeService.findById(1);
 		assertEquals("Equipe Nova", lista.get(0).getName());
@@ -71,11 +70,11 @@ public class EquipeServiceTest extends BaseTests{
 	@DisplayName ("Teste update equipe")
 	@Sql({"classpath:/resources/sqls/equipe.sql"})
 	void updateEquipeTest() {
-		var equipe = equipeService.update(new Equipe(1, "Equipe Nova"));
+		equipeService.update(new Equipe(1, "Equipe Nova"));
 		var lista = equipeService.listAll();
 		var equipeNova = equipeService.findById(1);
 		assertEquals(1, lista.get(0).getId());
-		assertEquals("Equipe Nova", lista.get(0).getName());
+		assertEquals("Equipe Nova", equipeNova.getName());
 		assertEquals(4, lista.size());
 	}
 	

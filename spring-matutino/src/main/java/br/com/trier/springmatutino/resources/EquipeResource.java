@@ -62,7 +62,7 @@ public class EquipeResource {
 	
 	@GetMapping ("/name/contem/{name}")
 	public ResponseEntity<List<Equipe>> buscaPorNomeContem(@PathVariable String name) {
-		List<Equipe> lista = service.findByNameContains(name);
+		List<Equipe> lista = service.findByNameContainsIgnoreCase(name);
 		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
 	}
 }

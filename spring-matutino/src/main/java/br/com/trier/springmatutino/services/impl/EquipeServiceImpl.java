@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import br.com.trier.springmatutino.domain.Equipe;
 import br.com.trier.springmatutino.repositories.EquipeRepository;
 import br.com.trier.springmatutino.services.EquipeService;
+import br.com.trier.springmatutino.services.exceptions.ObjetoNaoEncontrado;
+import br.com.trier.springmatutino.services.exceptions.ViolacaoIntegridade;
 
 @Service
 public class EquipeServiceImpl implements EquipeService{
@@ -18,6 +20,7 @@ public class EquipeServiceImpl implements EquipeService{
 	
 	@Override
 	public Equipe salvar(Equipe equipe) {
+		findByName(equipe);
 		return repository.save(equipe);
 	}
 
@@ -29,11 +32,13 @@ public class EquipeServiceImpl implements EquipeService{
 	@Override
 	public Equipe findById(Integer id) {
 		Optional<Equipe> equipe = repository.findById(id);
-		return equipe.orElse(null);
+		return equipe.orElseThrow(() -> new ObjetoNaoEncontrado("Equipe %s não encontrada".formatted(id)));
 	}
 
 	@Override
 	public Equipe update(Equipe equipe) {
+		findById(equipe.getId());
+		findByName(equipe);
 		return repository.save(equipe);
 	}
 
@@ -44,6 +49,13 @@ public class EquipeServiceImpl implements EquipeService{
 			repository.delete(equipe);
 		}
 	}
+	
+	private void findByName (Equipe equipe) {
+		Equipe equipeNova = repository.findByName(equipe.getName());
+		if ( equipeNova != null && equipeNova.getId() != equipe.getId()) {
+			throw new ViolacaoIntegridade("Euipe já cadastrada: %s".formatted(equipe.getName()));
+		}
+	}
 
 	@Override
 	public List<Equipe> findByNameIgnoreCase(String name) {
@@ -51,8 +63,8 @@ public class EquipeServiceImpl implements EquipeService{
 	}
 
 	@Override
-	public List<Equipe> findByNameContains(String name) {
-		return repository.findByNameContains(name);
+	public List<Equipe> findByNameContainsIgnoreCase(String name) {
+		return repository.findByNameContainsIgnoreCase(name);
 	}
 
 }

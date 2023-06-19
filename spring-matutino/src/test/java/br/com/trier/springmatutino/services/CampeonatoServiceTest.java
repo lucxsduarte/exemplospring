@@ -25,7 +25,7 @@ public class CampeonatoServiceTest extends BaseTests{
 	void findByDescTest() {
 		var lista = campService.findByDescriptionIgnoreCase("campeonato 1");
 		assertEquals("Campeonato 1", lista.get(0).getDescription());
-		lista = campService.findByDescriptionContains("nato");
+		lista = campService.findByDescriptionContainsIgnoreCase("nato");
 		assertEquals(4, lista.size());
 		assertEquals(1, lista.get(0).getId());
 	}
@@ -71,6 +71,16 @@ public class CampeonatoServiceTest extends BaseTests{
 	void findByAnoNonExistentTest() {
 		var lista = campService.findByAno(1996);
 		assertEquals(0, lista.size());
+	}
+	
+	@Test
+	@DisplayName ("Teste busca ano")
+	@Sql({"classpath:/resources/sqls/camp.sql"})
+	void findByAnoEDescriptionTest() {
+		var lista = campService.findByAnoAndDescription(1995, "Campeonato 1");
+		assertEquals("Campeonato 1", lista.get(0).getDescription());
+		assertEquals(1, lista.get(0).getId());
+		assertEquals(1, lista.size());
 	}
 	
 	@Test

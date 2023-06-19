@@ -19,4 +19,5 @@ public interface UserService {
 	List<User> findByNameIgnoreCase(String name);
 	
 	List<User> findByNameEndsWith(String name);
+	
 }

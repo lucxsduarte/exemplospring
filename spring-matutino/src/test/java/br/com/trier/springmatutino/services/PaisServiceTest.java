@@ -1,6 +1,7 @@
 package br.com.trier.springmatutino.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +11,8 @@ import org.springframework.test.context.jdbc.Sql;
 
 import br.com.trier.springmatutino.BaseTests;
 import br.com.trier.springmatutino.domain.Pais;
+import br.com.trier.springmatutino.services.exceptions.ObjetoNaoEncontrado;
+import br.com.trier.springmatutino.services.exceptions.ViolacaoIntegridade;
 import jakarta.transaction.Transactional;
 
 @Transactional
@@ -57,14 +60,29 @@ public class PaisServiceTest extends BaseTests{
 	}
 	
 	@Test
+	@DisplayName ("Lista todos vazio")
+	void listAllPaisNonExistentTest() {
+		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> paisService.listAll());
+		assertEquals("Nenhum pais encontrado", exception.getMessage());
+	}
+	
+	@Test
 	@DisplayName ("Teste cadastra pais")
 	void salvarPaisTest() {
-		var pais = paisService.salvar(new Pais(null,"Argentina"));
+		paisService.salvar(new Pais(null,"Argentina"));
 		var lista = paisService.listAll();
 		var paisCadastrado = paisService.findById(1);
 		assertEquals(1, lista.size());
 		assertEquals("Argentina", paisCadastrado.getName());
 		assertEquals(1, paisCadastrado.getId());
+	}
+	
+	@Test
+	@DisplayName ("Teste cadastra pais nome repetido")
+	@Sql({"classpath:/resources/sqls/pais.sql"})
+	void salvarPaisNameErrorTest() {
+		var exception = assertThrows(ViolacaoIntegridade.class, () -> paisService.salvar(new Pais(null,"Brasil")));
+		assertEquals("Pais já cadastrado: Brasil", exception.getMessage());
 	}
 	
 	@Test
@@ -74,8 +92,24 @@ public class PaisServiceTest extends BaseTests{
 		var pais = paisService.update(new Pais(1,"Chile"));
 		paisService.update(pais);
 		var paisNovo = paisService.findById(1);
-		assertEquals(1, pais.getId());
-		assertEquals("Chile", pais.getName());
+		assertEquals(1, paisNovo.getId());
+		assertEquals("Chile", paisNovo.getName());
+	}
+	
+	@Test
+	@DisplayName ("Teste update pais para nome ja existente")
+	@Sql({"classpath:/resources/sqls/pais.sql"})
+	void updatePaisNameErrorTest() {
+		var exception = assertThrows(ViolacaoIntegridade.class, () -> paisService.update(new Pais(2,"Brasil")));
+		assertEquals("Pais já cadastrado: Brasil", exception.getMessage());
+	}
+	
+	@Test
+	@DisplayName ("Teste update pais inexistente")
+	@Sql({"classpath:/resources/sqls/pais.sql"})
+	void updatePaisNonExistentrTest() {
+		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> paisService.update(new Pais(4,"Equador")));
+		assertEquals("Pais 4 não encontrado", exception.getMessage());
 	}
 	
 	@Test
@@ -93,8 +127,9 @@ public class PaisServiceTest extends BaseTests{
 	@DisplayName("Teste deleta pais inexistente")
 	@Sql({"classpath:/resources/sqls/pais.sql"})
 	void deletePaisNonExistentTest() {
-		paisService.delete(3);
+		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> paisService.delete(10));
 		var lista = paisService.listAll();
 		assertEquals(2, lista.size());
+		assertEquals("Pais 10 não encontrado", exception.getMessage());
 	}
 }

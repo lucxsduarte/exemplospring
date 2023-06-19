@@ -22,6 +22,8 @@ public interface CampeonatoService {
 	
 	List<Campeonato> findByDescriptionIgnoreCase(String description);
 	
-	List<Campeonato> findByDescriptionContains(String description);
+	List<Campeonato> findByDescriptionContainsIgnoreCase(String description);
+	
+	List<Campeonato> findByAnoAndDescription(Integer ano, String description);
 
 }

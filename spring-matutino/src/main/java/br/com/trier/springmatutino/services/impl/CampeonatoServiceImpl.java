@@ -61,8 +61,13 @@ public class CampeonatoServiceImpl implements CampeonatoService{
 	}
 
 	@Override
-	public List<Campeonato> findByDescriptionContains(String description) {
-		return repository.findByDescriptionContains(description);
+	public List<Campeonato> findByDescriptionContainsIgnoreCase(String description) {
+		return repository.findByDescriptionContainsIgnoreCase(description);
+	}
+
+	@Override
+	public List<Campeonato> findByAnoAndDescription(Integer ano, String description) {
+		return repository.findByAnoAndDescription(ano, description);
 	}
 
 

@@ -18,6 +18,6 @@ public interface EquipeService {
 	
 	List<Equipe> findByNameIgnoreCase(String name);
 	
-	List<Equipe> findByNameContains(String name);
+	List<Equipe> findByNameContainsIgnoreCase(String name);
 	
 }

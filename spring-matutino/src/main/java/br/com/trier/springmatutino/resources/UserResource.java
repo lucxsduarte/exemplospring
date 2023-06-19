@@ -56,14 +56,12 @@ public class UserResource {
 	
 	@GetMapping("/name/{name}")
 	public ResponseEntity<List<User>> buscaPorNome(@PathVariable String name){
-		List<User> lista = service.findByNameIgnoreCase(name);
-		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(service.findByNameIgnoreCase(name));
 	}
 	
 	@GetMapping("/name/termina/{name}")
 	public ResponseEntity<List<User>> buscaPorNomeTerminaCom(@PathVariable String name){
-		List<User> lista = service.findByNameEndsWith(name);
-		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(service.findByNameEndsWith(name));
 	}
 	
 }
