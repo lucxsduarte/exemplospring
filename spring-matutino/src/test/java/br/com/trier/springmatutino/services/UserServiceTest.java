@@ -142,8 +142,8 @@ public class UserServiceTest extends BaseTests{
 		var lista = userService.findByNameEndsWith("1");
 		assertEquals(1, lista.size());
 		
-		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> userService.findByNameIgnoreCase("luca"));
-		assertEquals("Nenhum usuário se chama luca", exception.getMessage());
+		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> userService.findByNameEndsWith("luca"));
+		assertEquals("Nenhum usuário termina com luca", exception.getMessage());
 	}
 	
 }
