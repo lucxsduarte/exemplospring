@@ -2,6 +2,7 @@ package br.com.trier.springmatutino.services;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +12,8 @@ import org.springframework.test.context.jdbc.Sql;
 
 import br.com.trier.springmatutino.BaseTests;
 import br.com.trier.springmatutino.domain.Campeonato;
+import br.com.trier.springmatutino.services.exceptions.AnoInvalido;
+import br.com.trier.springmatutino.services.exceptions.ObjetoNaoEncontrado;
 import jakarta.transaction.Transactional;
 
 @Transactional
@@ -51,8 +54,8 @@ public class CampeonatoServiceTest extends BaseTests{
 	@DisplayName ("Teste busca id inexistente")
 	@Sql({"classpath:/resources/sqls/camp.sql"})
 	void findByIdNonExistentTest() {
-		var camp = campService.findById(6);
-		assertTrue(camp == null);
+		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> campService.findById(10));
+		assertEquals("Campeonato 10 não encontrado", exception.getMessage());
 	}
 	
 	@Test
@@ -74,7 +77,7 @@ public class CampeonatoServiceTest extends BaseTests{
 	}
 	
 	@Test
-	@DisplayName ("Teste busca ano")
+	@DisplayName ("Teste busca ano e descricao")
 	@Sql({"classpath:/resources/sqls/camp.sql"})
 	void findByAnoEDescriptionTest() {
 		var lista = campService.findByAnoAndDescription(1995, "Campeonato 1");
@@ -101,6 +104,13 @@ public class CampeonatoServiceTest extends BaseTests{
 	}
 	
 	@Test
+	@DisplayName ("Teste cadastra camp ano impossivel")
+	void cadastraErrorCamp() {
+		var exception = assertThrows(AnoInvalido.class, () -> campService.salvar(new Campeonato(null, "Campeonato Novo", 1985)));
+		assertEquals("Ano 1985 inválido", exception.getMessage()); 
+	}
+	
+	@Test
 	@DisplayName ("Teste update camp")
 	@Sql({"classpath:/resources/sqls/camp.sql"})
 	void updateCamp() {
@@ -108,6 +118,14 @@ public class CampeonatoServiceTest extends BaseTests{
 		campService.update(camp);
 		var campNovo = campService.findById(1);
 		assertEquals(2005, campNovo.getAno());
+	}
+	
+	@Test
+	@DisplayName ("Teste update camp ano impossivel")
+	@Sql({"classpath:/resources/sqls/camp.sql"})
+	void updateCampAnoError() {
+		var exception = assertThrows(AnoInvalido.class, () -> campService.salvar(new Campeonato(1, "Campeonato Novo", 1985)));
+		assertEquals("Ano 1985 inválido", exception.getMessage()); 
 	}
 	
 	@Test
@@ -123,8 +141,22 @@ public class CampeonatoServiceTest extends BaseTests{
 	@DisplayName ("Teste delete camp inexistente")
 	@Sql({"classpath:/resources/sqls/camp.sql"})
 	void deleteNonExistentCamp() {
-		campService.delete(10);
+		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> campService.delete(10));
+		assertEquals("Campeonato 10 não encontrado", exception.getMessage()); 
+	}
+	
+	@Test
+	@DisplayName ("Teste lista todos")
+	@Sql({"classpath:/resources/sqls/camp.sql"})
+	void listAllTest() {
 		var lista = campService.listAll();
 		assertEquals(4, lista.size());
+	}
+	
+	@Test
+	@DisplayName("Teste lista todos vazio")
+	void listAllErrorTest() {
+		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> campService.listAll());
+		assertEquals("Nenhum campeonato encontrado", exception.getMessage());
 	}
 }

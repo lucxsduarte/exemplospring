@@ -51,6 +51,14 @@ public class PaisServiceTest extends BaseTests{
 	}
 	
 	@Test
+	@DisplayName ("Busca por ID inexistente")
+	@Sql({"classpath:/resources/sqls/pais.sql"})
+	void findByIdNonExistentTest() {
+		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> paisService.findById(10));
+		assertEquals("Pais 10 não encontrado", exception.getMessage());
+	}
+	
+	@Test
 	@DisplayName ("Lista todos")
 	@Sql({"classpath:/resources/sqls/pais.sql"})
 	void listAllPaisTest() {

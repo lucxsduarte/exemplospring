@@ -1,5 +1,6 @@
 package br.com.trier.springmatutino.services.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 import br.com.trier.springmatutino.domain.Campeonato;
 import br.com.trier.springmatutino.repositories.CampeonatoRepository;
 import br.com.trier.springmatutino.services.CampeonatoService;
+import br.com.trier.springmatutino.services.exceptions.AnoInvalido;
+import br.com.trier.springmatutino.services.exceptions.ObjetoNaoEncontrado;
 
 @Service
 public class CampeonatoServiceImpl implements CampeonatoService{
@@ -18,22 +21,29 @@ public class CampeonatoServiceImpl implements CampeonatoService{
 	
 	@Override
 	public Campeonato salvar(Campeonato campeonato) {
+		verificaAno(campeonato);
 		return repository.save(campeonato);
 	}
 
 	@Override
 	public List<Campeonato> listAll() {
-		return repository.findAll();
+		List<Campeonato> lista = repository.findAll();
+		if (lista.size() == 0) {
+			throw new ObjetoNaoEncontrado("Nenhum campeonato encontrado");
+		}
+		return lista;
 	}
 
 	@Override
 	public Campeonato findById(Integer id) {
-		Optional<Campeonato> equipe = repository.findById(id);
-		return equipe.orElse(null);
+		Optional<Campeonato> camp = repository.findById(id);
+		return camp.orElseThrow(() -> new ObjetoNaoEncontrado("Campeonato %s não encontrado".formatted(id)));
 	}
 
 	@Override
 	public Campeonato update(Campeonato campeonato) {
+		findById(campeonato.getId());
+		verificaAno(campeonato);
 		return repository.save(campeonato);
 	}
 
@@ -68,6 +78,14 @@ public class CampeonatoServiceImpl implements CampeonatoService{
 	@Override
 	public List<Campeonato> findByAnoAndDescription(Integer ano, String description) {
 		return repository.findByAnoAndDescription(ano, description);
+	}
+	
+	public void verificaAno(Campeonato camp) {
+		int anoAtual = LocalDate.now().getYear();
+		int anoMaximo = anoAtual + 1;
+		if (camp.getAno() <= 1990 || camp.getAno() >= anoMaximo) {
+			throw new AnoInvalido("Ano %s inválido".formatted(camp.getAno()));
+		}
 	}
 
 

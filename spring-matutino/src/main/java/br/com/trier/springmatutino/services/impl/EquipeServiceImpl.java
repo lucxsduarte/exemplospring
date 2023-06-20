@@ -26,7 +26,11 @@ public class EquipeServiceImpl implements EquipeService{
 
 	@Override
 	public List<Equipe> listAll() {
-		return repository.findAll();
+		List<Equipe> lista = repository.findAll();
+		if( lista.size() == 0 ) {
+			throw new ObjetoNaoEncontrado("Nenhuma equipe encontrada");
+		}
+		return lista;
 	}
 
 	@Override
@@ -53,7 +57,7 @@ public class EquipeServiceImpl implements EquipeService{
 	private void findByName (Equipe equipe) {
 		Equipe equipeNova = repository.findByName(equipe.getName());
 		if ( equipeNova != null && equipeNova.getId() != equipe.getId()) {
-			throw new ViolacaoIntegridade("Euipe já cadastrada: %s".formatted(equipe.getName()));
+			throw new ViolacaoIntegridade("Equipe já cadastrada: %s".formatted(equipe.getName()));
 		}
 	}
 
