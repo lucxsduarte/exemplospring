@@ -58,7 +58,7 @@ public class CorridaServiceTest extends BaseTests{
 	@Sql({"classpath:/resources/sqls/camp.sql"})
 	@Sql({"classpath:/resources/sqls/corrida.sql"})
 	void findByDateTest() {
-		var lista = corridaService.findByData(ZonedDateTime.of(2023,12,25,0,0,0,0, ZoneId.systemDefault()));
+		var lista = corridaService.findByData(ZonedDateTime.of(2023,12,25,10,30,0,0, ZoneId.systemDefault()));
 		assertEquals(1, lista.size());
 	}
 	
@@ -69,7 +69,7 @@ public class CorridaServiceTest extends BaseTests{
 	@Sql({"classpath:/resources/sqls/camp.sql"})
 	@Sql({"classpath:/resources/sqls/corrida.sql"})
 	void findByDateErrorTest() {
-		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> corridaService.findByData(ZonedDateTime.of(2023,07,20,10,30,0,0, ZoneId.systemDefault())));
+		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> corridaService.findByData(ZonedDateTime.of(2023,12,20,10,30,0,0, ZoneId.systemDefault())));
 		assertEquals("Nenhuma corrida encontrada na data", exception.getMessage());
 	}
 	
