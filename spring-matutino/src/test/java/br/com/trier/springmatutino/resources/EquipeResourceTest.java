@@ -39,7 +39,7 @@ public class EquipeResourceTest {
 	public void testFindByID() {
 		
 		ResponseEntity<EquipeDTO> responseEntity = rest.getForEntity(
-				"/equipe/2",
+				"/equipe/1",
 				EquipeDTO.class
         );
 		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
@@ -54,7 +54,7 @@ public class EquipeResourceTest {
 		HttpHeaders headers = new HttpHeaders();
 	    headers.setContentType(MediaType.APPLICATION_JSON);
 	    HttpEntity<String> entity = new HttpEntity<>(headers);
-		String nomeEquipe = "Brasil";
+		String nomeEquipe = "Lotus";
 		ResponseEntity<List<EquipeDTO>> responseEntity = rest.exchange(
 				"/equipe/name/" + nomeEquipe,
                 HttpMethod.GET,
@@ -118,7 +118,7 @@ public class EquipeResourceTest {
 	@DisplayName("teste cadastra equipe")
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	public  void testCreatePais() {
-		EquipeDTO dto = new EquipeDTO(null, "Pais Novo");
+		EquipeDTO dto = new EquipeDTO(null, "Equipe nova");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<EquipeDTO> requestEntity = new HttpEntity<>(dto, headers);
@@ -131,7 +131,7 @@ public class EquipeResourceTest {
         );
 		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
 		EquipeDTO equipe = responseEntity.getBody();
-	    assertEquals("Pais Novo", equipe.getName());
+	    assertEquals("Equipe nova", equipe.getName());
 	}
 	
 	@Test
@@ -139,7 +139,7 @@ public class EquipeResourceTest {
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	@Sql(scripts="classpath:/resources/sqls/equipe.sql")
 	public  void testUpdatePais() {
-		EquipeDTO dto = new EquipeDTO(1, "Pais Novo");
+		EquipeDTO dto = new EquipeDTO(1, "Equipe nova");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<EquipeDTO> requestEntity = new HttpEntity<>(dto, headers);
@@ -152,27 +152,8 @@ public class EquipeResourceTest {
         );
 		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
 		EquipeDTO equipe = responseEntity.getBody();
-	    assertEquals("Pais Novo", equipe.getName());
+	    assertEquals("Equipe nova", equipe.getName());
 	}
-	
-	/*@Test
-	@DisplayName("teste update pais inexistente")
-	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
-	public  void testUpdateNotFoundPais() {
-		PaisDTO dto = new PaisDTO(1, "Pais Novo");
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<PaisDTO> requestEntity = new HttpEntity<>(dto, headers);
-		
-		ResponseEntity<PaisDTO> responseEntity = rest.exchange(
-				"/pais/1",
-                HttpMethod.PUT,
-                requestEntity,
-                PaisDTO.class
-        );
-		assertEquals(responseEntity.getStatusCode(), HttpStatus.NOT_FOUND);
-	}
-	*/
 	
 	@Test
 	@DisplayName("teste delete equipe")

@@ -154,25 +154,7 @@ public class PaisResourceTest {
 		PaisDTO pais = responseEntity.getBody();
 	    assertEquals("Pais Novo", pais.getName());
 	}
-	
-	/*@Test
-	@DisplayName("teste update pais inexistente")
-	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
-	public  void testUpdateNotFoundPais() {
-		PaisDTO dto = new PaisDTO(1, "Pais Novo");
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<PaisDTO> requestEntity = new HttpEntity<>(dto, headers);
-		
-		ResponseEntity<PaisDTO> responseEntity = rest.exchange(
-				"/pais/1",
-                HttpMethod.PUT,
-                requestEntity,
-                PaisDTO.class
-        );
-		assertEquals(responseEntity.getStatusCode(), HttpStatus.NOT_FOUND);
-	}
-	*/
+
 	@Test
 	@DisplayName("teste delete pais")
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")

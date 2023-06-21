@@ -27,7 +27,7 @@ public class PaisResouce {
 	@PostMapping
 	public ResponseEntity<PaisDTO> insert(@RequestBody PaisDTO pais) {
 		Pais newPais = service.salvar(new Pais(pais));
-		return newPais != null ? ResponseEntity.ok(newPais.toDto()) : ResponseEntity.badRequest().build();
+		return ResponseEntity.ok(newPais.toDto());
 	}
 	
 	@GetMapping ("/{id}")
@@ -45,8 +45,8 @@ public class PaisResouce {
 	public ResponseEntity<PaisDTO> update(@PathVariable Integer id, @RequestBody PaisDTO paisDTO){
 		Pais pais = new Pais(paisDTO);
 		pais.setId(id);
-		pais = service.salvar(pais);
-		return pais != null ? ResponseEntity.ok(pais.toDto()) : ResponseEntity.badRequest().build();
+		pais = service.update(pais);
+		return ResponseEntity.ok(pais.toDto());
 	}
 	
 	@DeleteMapping ("/{id}")

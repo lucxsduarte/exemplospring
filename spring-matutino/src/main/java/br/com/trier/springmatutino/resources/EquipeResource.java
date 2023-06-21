@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.trier.springmatutino.domain.Equipe;
+import br.com.trier.springmatutino.domain.dto.EquipeDTO;
 import br.com.trier.springmatutino.services.EquipeService;
 
 @RestController
@@ -24,28 +25,28 @@ public class EquipeResource {
 	private EquipeService service;
 	
 	@PostMapping
-	public ResponseEntity<Equipe> insert(@RequestBody Equipe equipe) {
+	public ResponseEntity<EquipeDTO> insert(@RequestBody Equipe equipe) {
 		Equipe newEquipe = service.salvar(equipe);
-		return newEquipe != null ? ResponseEntity.ok(newEquipe) : ResponseEntity.badRequest().build();
+		return ResponseEntity.ok(newEquipe.toDto());
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Equipe>> listarTodos(){
-		List<Equipe> lista = service.listAll();
-		return lista != null ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	public ResponseEntity<List<EquipeDTO>> listarTodos(){
+		return ResponseEntity.ok(service.listAll().stream().map(equipe -> equipe.toDto()).toList());
 	}
 	
 	@GetMapping ("/{id}")
-	public ResponseEntity<Equipe> buscaPorCodigo(@PathVariable Integer id) {
+	public ResponseEntity<EquipeDTO> buscaPorCodigo(@PathVariable Integer id) {
 		Equipe newEquipe = service.findById(id);
-		return newEquipe != null ? ResponseEntity.ok(newEquipe) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(newEquipe.toDto());
 	}
 	
 	@PutMapping ("/{id}")
-	public ResponseEntity<Equipe> update(@PathVariable Integer id, @RequestBody Equipe equipe){
+	public ResponseEntity<EquipeDTO> update(@PathVariable Integer id, @RequestBody EquipeDTO equipeDTO){
+		Equipe equipe = new Equipe(equipeDTO);
 		equipe.setId(id);
 		equipe = service.update(equipe);
-		return equipe != null ? ResponseEntity.ok(equipe) : ResponseEntity.badRequest().build();
+		return ResponseEntity.ok(equipe.toDto());
 	}
 	
 	@DeleteMapping ("/{id}")
@@ -55,14 +56,12 @@ public class EquipeResource {
 	}
 	
 	@GetMapping ("/name/{name}")
-	public ResponseEntity<List<Equipe>> buscaPorNome(@PathVariable String name) {
-		List<Equipe> lista = service.findByNameIgnoreCase(name);
-		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	public ResponseEntity<List<EquipeDTO>> buscaPorNome(@PathVariable String name) {
+		return ResponseEntity.ok(service.findByNameIgnoreCase(name).stream().map(equipe -> equipe.toDto()).toList());
 	}
 	
 	@GetMapping ("/name/contem/{name}")
-	public ResponseEntity<List<Equipe>> buscaPorNomeContem(@PathVariable String name) {
-		List<Equipe> lista = service.findByNameContainsIgnoreCase(name);
-		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	public ResponseEntity<List<EquipeDTO>> buscaPorNomeContem(@PathVariable String name) {
+		return ResponseEntity.ok(service.findByNameContainsIgnoreCase(name).stream().map(equipe -> equipe.toDto()).toList());
 	}
 }
