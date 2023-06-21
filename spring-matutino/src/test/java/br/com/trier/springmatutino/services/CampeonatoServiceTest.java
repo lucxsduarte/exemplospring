@@ -12,8 +12,8 @@ import org.springframework.test.context.jdbc.Sql;
 
 import br.com.trier.springmatutino.BaseTests;
 import br.com.trier.springmatutino.domain.Campeonato;
-import br.com.trier.springmatutino.services.exceptions.AnoInvalido;
 import br.com.trier.springmatutino.services.exceptions.ObjetoNaoEncontrado;
+import br.com.trier.springmatutino.services.exceptions.ViolacaoIntegridade;
 import jakarta.transaction.Transactional;
 
 @Transactional
@@ -106,7 +106,7 @@ public class CampeonatoServiceTest extends BaseTests{
 	@Test
 	@DisplayName ("Teste cadastra camp ano impossivel")
 	void cadastraErrorCamp() {
-		var exception = assertThrows(AnoInvalido.class, () -> campService.salvar(new Campeonato(null, "Campeonato Novo", 1985)));
+		var exception = assertThrows(ViolacaoIntegridade.class, () -> campService.salvar(new Campeonato(null, "Campeonato Novo", 1985)));
 		assertEquals("Ano 1985 inválido", exception.getMessage()); 
 	}
 	
@@ -124,7 +124,7 @@ public class CampeonatoServiceTest extends BaseTests{
 	@DisplayName ("Teste update camp ano impossivel")
 	@Sql({"classpath:/resources/sqls/camp.sql"})
 	void updateCampAnoError() {
-		var exception = assertThrows(AnoInvalido.class, () -> campService.salvar(new Campeonato(1, "Campeonato Novo", 1985)));
+		var exception = assertThrows(ViolacaoIntegridade.class, () -> campService.salvar(new Campeonato(1, "Campeonato Novo", 1985)));
 		assertEquals("Ano 1985 inválido", exception.getMessage()); 
 	}
 	

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import br.com.trier.springmatutino.domain.Campeonato;
 import br.com.trier.springmatutino.repositories.CampeonatoRepository;
 import br.com.trier.springmatutino.services.CampeonatoService;
-import br.com.trier.springmatutino.services.exceptions.AnoInvalido;
 import br.com.trier.springmatutino.services.exceptions.ObjetoNaoEncontrado;
+import br.com.trier.springmatutino.services.exceptions.ViolacaoIntegridade;
 
 @Service
 public class CampeonatoServiceImpl implements CampeonatoService{
@@ -84,7 +84,7 @@ public class CampeonatoServiceImpl implements CampeonatoService{
 		int anoAtual = LocalDate.now().getYear();
 		int anoMaximo = anoAtual + 1;
 		if (camp.getAno() <= 1990 || camp.getAno() >= anoMaximo) {
-			throw new AnoInvalido("Ano %s inválido".formatted(camp.getAno()));
+			throw new ViolacaoIntegridade("Ano %s inválido".formatted(camp.getAno()));
 		}
 	}
 

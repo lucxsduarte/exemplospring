@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.trier.springmatutino.domain.Pais;
+import br.com.trier.springmatutino.domain.dto.PaisDTO;
 import br.com.trier.springmatutino.services.PaisService;
 
 @RestController
@@ -24,28 +25,28 @@ public class PaisResouce {
 	private PaisService service;
 	
 	@PostMapping
-	public ResponseEntity<Pais> insert(@RequestBody Pais pais) {
-		Pais newPais = service.salvar(pais);
-		return newPais != null ? ResponseEntity.ok(newPais) : ResponseEntity.badRequest().build();
+	public ResponseEntity<PaisDTO> insert(@RequestBody PaisDTO pais) {
+		Pais newPais = service.salvar(new Pais(pais));
+		return newPais != null ? ResponseEntity.ok(newPais.toDto()) : ResponseEntity.badRequest().build();
 	}
 	
 	@GetMapping ("/{id}")
-	public ResponseEntity<Pais> buscaPorCodigo(@PathVariable Integer id) {
+	public ResponseEntity<PaisDTO> buscaPorCodigo(@PathVariable Integer id) {
 		Pais pais = service.findById(id);
-		return pais != null ? ResponseEntity.ok(pais) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(pais.toDto());
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Pais>> listarTodos() {
-		List<Pais> lista = service.listAll();
-		return lista.size()>0  ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	public ResponseEntity<List<PaisDTO>> listarTodos() {
+		return ResponseEntity.ok(service.listAll().stream().map(pais -> pais.toDto()).toList());
 	}
 	
 	@PutMapping ("/{id}")
-	public ResponseEntity<Pais> update(@PathVariable Integer id, @RequestBody Pais pais){
+	public ResponseEntity<PaisDTO> update(@PathVariable Integer id, @RequestBody PaisDTO paisDTO){
+		Pais pais = new Pais(paisDTO);
 		pais.setId(id);
 		pais = service.salvar(pais);
-		return pais != null ? ResponseEntity.ok(pais) : ResponseEntity.noContent().build();
+		return pais != null ? ResponseEntity.ok(pais.toDto()) : ResponseEntity.badRequest().build();
 	}
 	
 	@DeleteMapping ("/{id}")
@@ -55,15 +56,14 @@ public class PaisResouce {
 	}
 	
 	@GetMapping ("/name/{name}")
-	public ResponseEntity<List<Pais>> buscaPorNome(@PathVariable String name) {
-		List<Pais> lista = service.findByNameIgnoreCase(name);
-		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	public ResponseEntity<List<PaisDTO>> buscaPorNome(@PathVariable String name) {
+		return ResponseEntity.ok(service.findByNameIgnoreCase(name).stream().map(pais -> pais.toDto()).toList());
+		
 	}
 	
 	@GetMapping ("/name/contem/{name}")
-	public ResponseEntity<List<Pais>> buscaPorNomeContem(@PathVariable String name) {
-		List<Pais> lista = service.findByNameContains(name);
-		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	public ResponseEntity<List<PaisDTO>> buscaPorNomeContem(@PathVariable String name) {
+		return ResponseEntity.ok(service.findByNameContains(name).stream().map(pais -> pais.toDto()).toList());
 	}
 	
 }
