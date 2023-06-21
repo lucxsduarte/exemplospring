@@ -1,5 +1,6 @@
 package br.com.trier.springmatutino.domain;
 
+import br.com.trier.springmatutino.domain.dto.PilotoDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,8 +29,16 @@ public class Piloto {
 	private String name;
 	
 	@Column (name = "pais_piloto")
-	private Integer pais;
+	private Pais pais;
 	
 	@Column (name = "equipe_piloto")
-	private Integer equipe;
+	private Equipe equipe;
+	
+	public Piloto (PilotoDTO dto) {
+		this(dto.getId(), dto.getName(), dto.getPais(), dto.getEquipe());
+	}
+	
+	public PilotoDTO toDto() {
+		return new PilotoDTO(this.id, this.name, this.pais, this.equipe);
+	}
 }

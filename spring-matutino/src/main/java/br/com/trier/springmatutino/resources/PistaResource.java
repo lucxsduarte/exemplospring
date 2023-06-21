@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.trier.springmatutino.domain.Pais;
 import br.com.trier.springmatutino.domain.Pista;
+import br.com.trier.springmatutino.services.PaisService;
 import br.com.trier.springmatutino.services.PistaService;
 
 @RestController
@@ -22,31 +24,31 @@ public class PistaResource {
 	
 	@Autowired
 	private PistaService service;
+	@Autowired
+	private PaisService paisService;
 	
 	@PostMapping
 	public ResponseEntity<Pista> insert(@RequestBody Pista pista){
-		Pista newPista = service.salvar(pista);
-		return newPista != null ? ResponseEntity.ok(newPista) : ResponseEntity.badRequest().build();
+		paisService.findById(pista.getPais().getId());
+		return ResponseEntity.ok(service.salvar(pista));
 	}
 	
 	@GetMapping
 	public ResponseEntity<List<Pista>> listarTodos(){
-		List<Pista> lista = service.listAll();
-		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(service.listAll());
 		
 	}
 	
 	@GetMapping ("/{id}")
 	public ResponseEntity<Pista> buscaPorCodigo(@PathVariable Integer id){
-		Pista pista = service.findById(id);
-		return pista != null ? ResponseEntity.ok(pista) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(service.findById(id));
 	}
 	
 	@PutMapping ("/{id}")
 	public ResponseEntity<Pista> update(@PathVariable Integer id, @RequestBody Pista pista){
+		paisService.findById(pista.getPais().getId());
 		pista.setId(id);
-		pista = service.update(pista);
-		return pista != null ? ResponseEntity.ok(pista) : ResponseEntity.badRequest().build();
+		return ResponseEntity.ok(service.update(pista));
 	}
 	
 	@DeleteMapping ("/{id}")
@@ -56,21 +58,18 @@ public class PistaResource {
 	}
 	
 	@GetMapping("/tamanho/{tamanho}")
-	public ResponseEntity<List<Pista>> buscaPorTamanho(@PathVariable Double tamanho){
-		List<Pista> lista = service.findByTamanho(tamanho);
-		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	public ResponseEntity<List<Pista>> buscaPorTamanho(@PathVariable Integer tamanho){
+		return ResponseEntity.ok(service.findByTamanho(tamanho));
 	}
 	
 	@GetMapping("/tamanho/entre/{tamanho1}/{tamanho2}")
-	public ResponseEntity<List<Pista>> buscaPorTamanhoEntre(@PathVariable Double tamanho1, @PathVariable Double tamanho2){
-		List<Pista> lista = service.findByTamanhoBetween(tamanho1, tamanho2);
-		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	public ResponseEntity<List<Pista>> buscaPorTamanhoEntre(@PathVariable Integer tamanho1, @PathVariable Integer tamanho2){
+		return ResponseEntity.ok(service.findByTamanhoBetween(tamanho1, tamanho2));
 	}
 	
-	@GetMapping ("/pais/{pais}")
-	public ResponseEntity<List<Pista>> buscaPorPais(@PathVariable Integer pais){
-		List<Pista> lista = service.findByPais(pais);
-		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	@GetMapping ("/pais/{id_pais}")
+	public ResponseEntity<List<Pista>> buscaPorPaisOrderByTamanhoDesc(@PathVariable Integer id_pais){
+		return ResponseEntity.ok(service.findByPaisOrderByTamanhoDesc(paisService.findById(id_pais)));
 	}
 	
 

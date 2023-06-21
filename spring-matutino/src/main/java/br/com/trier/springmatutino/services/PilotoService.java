@@ -2,6 +2,8 @@ package br.com.trier.springmatutino.services;
 
 import java.util.List;
 
+import br.com.trier.springmatutino.domain.Equipe;
+import br.com.trier.springmatutino.domain.Pais;
 import br.com.trier.springmatutino.domain.Piloto;
 
 
@@ -21,8 +23,8 @@ public interface PilotoService {
 	
 	List<Piloto> findByNameContains(String name);
 	
-	List<Piloto> findByPais(Integer pais);
+	List<Piloto> findByPais(Pais pais);
 	
-	List<Piloto> findByEquipe(Integer equipe);
+	List<Piloto> findByEquipe(Equipe equipe);
 	
 }

@@ -22,12 +22,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import br.com.trier.springmatutino.SpringMatutinoApplication;
-import br.com.trier.springmatutino.domain.dto.PaisDTO;
+import br.com.trier.springmatutino.domain.Pista;
 
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = Replace.ANY)
 @SpringBootTest(classes = SpringMatutinoApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PaisResourceTest {
+public class PistaResourceTest {
 
 	@Autowired
 	protected TestRestTemplate rest;
@@ -36,130 +36,148 @@ public class PaisResourceTest {
 	@DisplayName("teste Buscar por id")
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	@Sql(scripts="classpath:/resources/sqls/pais.sql")
+	@Sql(scripts="classpath:/resources/sqls/pista.sql")
 	public void testFindByID() {
-		ResponseEntity<PaisDTO> responseEntity = rest.getForEntity(
-				"/pais/1",
-                PaisDTO.class
+		
+		ResponseEntity<Pista> responseEntity = rest.getForEntity(
+				"/pista/1" ,
+				Pista.class
         );
-		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 	}
-
+	
+	@Test
+	@DisplayName("teste Buscar por tamanho")
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	@Sql(scripts="classpath:/resources/sqls/pais.sql")
-	@Test
-	@DisplayName("teste Buscar por name")
-	public void testFindByName() {
+	@Sql(scripts="classpath:/resources/sqls/pista.sql")
+	public void testFindByTamanho() {
 		
 		HttpHeaders headers = new HttpHeaders();
 	    headers.setContentType(MediaType.APPLICATION_JSON);
 	    HttpEntity<String> entity = new HttpEntity<>(headers);
-		String nomePais = "Brasil";
-		ResponseEntity<List<PaisDTO>> responseEntity = rest.exchange(
-				"/pais/name/" + nomePais,
+		ResponseEntity<List<Pista>> responseEntity = rest.exchange(
+				"/pista/tamanho/10",
                 HttpMethod.GET,
                 entity,
-                new ParameterizedTypeReference<List<PaisDTO>>() {}
+                new ParameterizedTypeReference<List<Pista>>() {}
         );
-		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
-		List<PaisDTO> pais = responseEntity.getBody();
-	    assertEquals(1, pais.size());
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		List<Pista> lista = responseEntity.getBody();
+	    assertEquals(1, lista.size());
 	}
 	
+	@Test
+	@DisplayName("teste Buscar por tamanho entre")
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	@Sql(scripts="classpath:/resources/sqls/pais.sql")
-	@Test
-	@DisplayName("teste Buscar por name contem")
-	public void testFindByNameContains() {
+	@Sql(scripts="classpath:/resources/sqls/pista.sql")
+	public void testFindByTamanhoEntre() {
 		
 		HttpHeaders headers = new HttpHeaders();
 	    headers.setContentType(MediaType.APPLICATION_JSON);
 	    HttpEntity<String> entity = new HttpEntity<>(headers);
-		String contem = "a";
-		ResponseEntity<List<PaisDTO>> responseEntity = rest.exchange(
-				"/pais/name/contem/" + contem,
+		ResponseEntity<List<Pista>> responseEntity = rest.exchange(
+				"/pista/tamanho/entre/1/9",
                 HttpMethod.GET,
                 entity,
-                new ParameterizedTypeReference<List<PaisDTO>>() {}
+                new ParameterizedTypeReference<List<Pista>>() {}
         );
-		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
-		List<PaisDTO> pais = responseEntity.getBody();
-	    assertEquals(5, pais.size());
-	}
-	 
-	@Test
-	@DisplayName("teste Buscar por id inexistente")
-	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
-	@Sql(scripts="classpath:/resources/sqls/pais.sql")
-	public void testFindByNotFoundID() {
-		ResponseEntity<PaisDTO> responseEntity = rest.getForEntity(
-				"/pais/100",
-                PaisDTO.class
-        );
-		assertEquals(responseEntity.getStatusCode(), HttpStatus.NOT_FOUND);
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		List<Pista> lista = responseEntity.getBody();
+	    assertEquals(3, lista.size());
 	}
 	
 	@Test
-	@DisplayName("teste Listar todos")
+	@DisplayName("teste Buscar por pais")
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	@Sql(scripts="classpath:/resources/sqls/pais.sql")
+	@Sql(scripts="classpath:/resources/sqls/pista.sql")
+	public void testFindByPais() {
+		
+		HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_JSON);
+	    HttpEntity<String> entity = new HttpEntity<>(headers);
+		ResponseEntity<List<Pista>> responseEntity = rest.exchange(
+				"/pista/pais/1",
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<List<Pista>>() {}
+        );
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		List<Pista> lista = responseEntity.getBody();
+	    assertEquals(1, lista.size());
+	}
+	
+	@Test
+	@DisplayName("teste listar todos")
+	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
+	@Sql(scripts="classpath:/resources/sqls/pais.sql")
+	@Sql(scripts="classpath:/resources/sqls/pista.sql")
 	public void testListAll() {
-		ResponseEntity<List<PaisDTO>> responseEntity = rest.exchange(
-				"/pais",
+		
+		HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_JSON);
+	    HttpEntity<String> entity = new HttpEntity<>(headers);
+		ResponseEntity<List<Pista>> responseEntity = rest.exchange(
+				"/pista",
                 HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<PaisDTO>>() {}
+                entity,
+                new ParameterizedTypeReference<List<Pista>>() {}
         );
-		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
-		List<PaisDTO> pais = responseEntity.getBody();
-	    assertEquals(5, pais.size());
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		List<Pista> lista = responseEntity.getBody();
+	    assertEquals(4, lista.size());
 	}
 	
 	@Test
-	@DisplayName("teste cadastra pais")
+	@DisplayName("teste cadastra pista")
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
-	public  void testCreatePais() {
-		PaisDTO dto = new PaisDTO(null, "Pais Novo");
+	@Sql(scripts="classpath:/resources/sqls/pais.sql")
+	public void testCadastra() {
+		Pista pista = new Pista();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<PaisDTO> requestEntity = new HttpEntity<>(dto, headers);
+		HttpEntity<Pista> requestEntity = new HttpEntity<>(pista, headers);
 		
-		ResponseEntity<PaisDTO> responseEntity = rest.exchange(
-				"/pais",
+		ResponseEntity<Pista> responseEntity = rest.exchange(
+				"/pista",
                 HttpMethod.POST,
                 requestEntity,
-                PaisDTO.class
+                Pista.class
         );
-		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
-		PaisDTO pais = responseEntity.getBody();
-	    assertEquals("Pais Novo", pais.getName());
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		Pista pistaNova = responseEntity.getBody();
+		assertEquals(null,pistaNova.getPais());
 	}
 	
 	@Test
-	@DisplayName("teste update pais")
+	@DisplayName("teste update pista")
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	@Sql(scripts="classpath:/resources/sqls/pais.sql")
-	public  void testUpdatePais() {
-		PaisDTO dto = new PaisDTO(1, "Pais Novo");
+	public void testUpdate() {
+		Pista pista = new Pista();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<PaisDTO> requestEntity = new HttpEntity<>(dto, headers);
+		HttpEntity<Pista> requestEntity = new HttpEntity<>(pista, headers);
 		
-		ResponseEntity<PaisDTO> responseEntity = rest.exchange(
-				"/pais/1",
+		ResponseEntity<Pista> responseEntity = rest.exchange(
+				"/pista/1",
                 HttpMethod.PUT,
                 requestEntity,
-                PaisDTO.class
+                Pista.class
         );
-		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
-		PaisDTO pais = responseEntity.getBody();
-	    assertEquals("Pais Novo", pais.getName());
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		Pista pistaNova = responseEntity.getBody();
+		assertEquals(null,pistaNova.getPais());
 	}
-
+	
 	@Test
-	@DisplayName("teste delete pais")
+	@DisplayName("teste delete pista")
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	@Sql(scripts="classpath:/resources/sqls/pais.sql")
-	public void testDeletePais() {
+	@Sql(scripts="classpath:/resources/sqls/pista.sql")
+	public void testDelete() {
 		ResponseEntity<Void> responseEntity = rest.exchange(
 				"/pais/1",
                 HttpMethod.DELETE,
@@ -170,17 +188,17 @@ public class PaisResourceTest {
 	}
 	
 	@Test
-	@DisplayName("teste delete pais inexistente")
+	@DisplayName("teste delete pista inexistente")
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	@Sql(scripts="classpath:/resources/sqls/pais.sql")
+	@Sql(scripts="classpath:/resources/sqls/pista.sql")
 	public void testDeleteNotFoundPais() {
 		ResponseEntity<Void> responseEntity = rest.exchange(
-				"/pais/" + 6,
+				"/pais/10",
                 HttpMethod.DELETE,
                 null,
                 Void.class
         );
 		assertEquals(responseEntity.getStatusCode(), HttpStatus.NOT_FOUND);
 	}
-	
 }

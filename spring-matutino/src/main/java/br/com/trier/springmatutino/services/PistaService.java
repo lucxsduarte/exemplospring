@@ -2,6 +2,7 @@ package br.com.trier.springmatutino.services;
 
 import java.util.List;
 
+import br.com.trier.springmatutino.domain.Pais;
 import br.com.trier.springmatutino.domain.Pista;
 
 public interface PistaService {
@@ -16,10 +17,10 @@ public interface PistaService {
 	
 	void delete(Integer id);
 	
-	List<Pista> findByPais(Integer pais);
+	List<Pista> findByPaisOrderByTamanhoDesc(Pais pais);
 	
-	List<Pista> findByTamanho(Double tamanho);
+	List<Pista> findByTamanho(Integer tamanho);
 	
-	List<Pista> findByTamanhoBetween(Double tamanho1, Double tamanho2);
+	List<Pista> findByTamanhoBetween(Integer tamanho1, Integer tamanho2);
 	
 }

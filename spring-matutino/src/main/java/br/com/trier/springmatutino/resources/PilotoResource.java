@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.trier.springmatutino.domain.Piloto;
+import br.com.trier.springmatutino.services.EquipeService;
+import br.com.trier.springmatutino.services.PaisService;
 import br.com.trier.springmatutino.services.PilotoService;
 
 @RestController
@@ -21,55 +23,53 @@ import br.com.trier.springmatutino.services.PilotoService;
 public class PilotoResource {
 	
 	@Autowired
-	PilotoService service;
+	private PilotoService service;
+	@Autowired
+	private PaisService paisService;
+	@Autowired
+	private EquipeService equipeService;
 	
 	@PostMapping
 	public ResponseEntity<Piloto> insert(@RequestBody Piloto piloto){
-		Piloto newPiloto = service.salvar(piloto);
-		return newPiloto != null ? ResponseEntity.ok(newPiloto) : ResponseEntity.badRequest().build();
+		return ResponseEntity.ok(service.salvar(piloto));
 	}
 	
 	@GetMapping
 	public ResponseEntity<List<Piloto>> listarTodos(@PathVariable Integer id){
-		List<Piloto> lista = service.listAll();
-		return lista.size() > 1 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(service.listAll());
 	}
 	
 	@GetMapping ("/{id}")
 	public ResponseEntity<Piloto> buscaPorId(@PathVariable Integer id){
-		Piloto piloto = service.findById(id);
-		return piloto != null ? ResponseEntity.ok(piloto) : ResponseEntity.badRequest().build();
+		return ResponseEntity.ok(service.findById(id));
 	}
 	
 	@GetMapping ("/nome/{name}")
 	public ResponseEntity<List<Piloto>> buscaPorNome(@PathVariable String name){
-		List<Piloto> lista = service.findByNameIgnoreCase(name);
-		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(service.findByNameIgnoreCase(name));
 	}
 	
 	@GetMapping ("/nome/contem/{name}")
 	public ResponseEntity<List<Piloto>> buscaPorNomeContem(@PathVariable String name){
-		List<Piloto> lista = service.findByNameContains(name);
-		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+		return ResponseEntity.ok(service.findByNameContains(name));
 	}
 	
 	@GetMapping ("/equipe/{equipe}")
-	public ResponseEntity<List<Piloto>> buscaPorEquipe(@PathVariable Integer equipe){
-		List<Piloto> lista = service.findByEquipe(equipe);
-		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	public ResponseEntity<List<Piloto>> buscaPorEquipe(@PathVariable Integer id_equipe){
+		return ResponseEntity.ok(service.findByEquipe(equipeService.findById(id_equipe))) ;
 	}
 	
 	@GetMapping ("/pais/{pais}")
-	public ResponseEntity<List<Piloto>> buscaPoPais(@PathVariable Integer pais){
-		List<Piloto> lista = service.findByEquipe(pais);
-		return lista.size() > 0 ? ResponseEntity.ok(lista) : ResponseEntity.noContent().build();
+	public ResponseEntity<List<Piloto>> buscaPoPais(@PathVariable Integer id_pais){
+		return ResponseEntity.ok(service.findByPais(paisService.findById(id_pais)));
 	}
 	
 	@PutMapping ("/{id}")
 	public ResponseEntity<Piloto> udate(@PathVariable Integer id, @RequestBody Piloto piloto){
+		paisService.findById(piloto.getPais().getId());
+		equipeService.findById(piloto.getEquipe().getId());
 		piloto.setId(id);
-		piloto = service.update(piloto);
-		return piloto != null ? ResponseEntity.ok(piloto) : ResponseEntity.badRequest().build();
+		return ResponseEntity.ok(service.update(piloto));
 	}
 	
 	@DeleteMapping ("/{id}")
