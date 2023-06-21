@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.trier.springmatutino.domain.Pais;
 import br.com.trier.springmatutino.domain.Pista;
 import br.com.trier.springmatutino.services.PaisService;
 import br.com.trier.springmatutino.services.PistaService;

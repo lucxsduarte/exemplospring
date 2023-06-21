@@ -16,7 +16,7 @@ import br.com.trier.springmatutino.services.exceptions.ObjetoNaoEncontrado;
 public class PilotoServiceImpl implements PilotoService{
 
 	@Autowired
-	PilotoRepository repository;
+	private PilotoRepository repository;
 	
 	@Override
 	public Piloto salvar(Piloto piloto) {
@@ -52,19 +52,27 @@ public class PilotoServiceImpl implements PilotoService{
 
 	@Override
 	public List<Piloto> findByNameIgnoreCase(String name) {
-		return repository.findByNameIgnoreCase(name);
+		List<Piloto> lista = repository.findByNameIgnoreCase(name);
+		if(lista.size() == 0 ) {
+			throw new ObjetoNaoEncontrado("Nenhum piloto encontrado com o nome %s".formatted(name));
+		}
+		return lista;
 	}
 
 	@Override
 	public List<Piloto> findByNameContains(String name) {
-		return repository.findByNameContains(name);
+		List<Piloto> lista = repository.findByNameContains(name);
+		if(lista.size() == 0 ) {
+			throw new ObjetoNaoEncontrado("Nenhum piloto encontrado contem no nome %s".formatted(name));
+		}
+		return lista;
 	}
 
 	@Override
 	public List<Piloto> findByPais(Pais pais) {
 		List<Piloto> lista = repository.findByPais(pais);
 		if(lista.size() == 0 ) {
-			throw new ObjetoNaoEncontrado("Nenhuma pista encontrada no pais %s".formatted(pais.getName()));
+			throw new ObjetoNaoEncontrado("Nenhum piloto encontrado do pais %s".formatted(pais.getName()));
 		}
 		return lista;
 	}
@@ -73,7 +81,7 @@ public class PilotoServiceImpl implements PilotoService{
 	public List<Piloto> findByEquipe(Equipe equipe) {
 		List<Piloto> lista = repository.findByEquipe(equipe);
 		if(lista.size() == 0 ) {
-			throw new ObjetoNaoEncontrado("Nenhuma equipe encontrada no pais %s".formatted(equipe.getName()));
+			throw new ObjetoNaoEncontrado("Nenhum piloto encontrado da equipe %s".formatted(equipe.getName()));
 		}
 		return lista;
 	}

@@ -1,10 +1,14 @@
 package br.com.trier.springmatutino.domain;
 
+import java.time.ZonedDateTime;
+
+import br.com.trier.springmatutino.domain.dto.CorridaDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,13 +28,20 @@ public class Corrida {
 	@Setter
 	private Integer id;
 	
-	//@Column (name = "data_corrida")
-	//private LocalDate data;
+	@Column (name = "data_corrida")
+	private ZonedDateTime data;
 	
-	@Column (name = "pista_corrida")
-	private Integer pista;
+	@ManyToOne
+	private Pista pista;
 	
-	@Column (name = "camp_corrida")
-	private Integer campeonato;
+	@ManyToOne
+	private Campeonato campeonato;
 	
+	public Corrida (CorridaDTO dto) {
+		this(dto.getId(), dto.getData(), dto.getPista(), dto.getCampeonato());
+	}
+	
+	public CorridaDTO toDto() {
+		return new CorridaDTO(this.id, this.data, this.pista, this.campeonato);
+	}
 }

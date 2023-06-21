@@ -1,8 +1,11 @@
 package br.com.trier.springmatutino.services;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
+import br.com.trier.springmatutino.domain.Campeonato;
 import br.com.trier.springmatutino.domain.Corrida;
+import br.com.trier.springmatutino.domain.Pista;
 
 public interface CorridaService {
 
@@ -16,11 +19,11 @@ public interface CorridaService {
 	
 	void delete(Integer id);
 	
-	List<Corrida> findByPista(Integer pista);
+	List<Corrida> findByPista(Pista pista);
 	
-	List<Corrida> findByCampeonato(Integer campeonato);
+	List<Corrida> findByCampeonato(Campeonato campeonato);
 	
-	//List<Corrida> findByData(LocalDate data);
+	List<Corrida> findByData(ZonedDateTime data);
 	
-	//List<Corrida> findByDataBetween(LocalDate data1, LocalDate data2);
+	List<Corrida> findByDataBetween(ZonedDateTime data1, ZonedDateTime data2);
 }

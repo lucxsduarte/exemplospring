@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.trier.springmatutino.domain.Piloto;
+import br.com.trier.springmatutino.domain.dto.PilotoDTO;
 import br.com.trier.springmatutino.services.EquipeService;
 import br.com.trier.springmatutino.services.PaisService;
 import br.com.trier.springmatutino.services.PilotoService;
@@ -30,46 +31,48 @@ public class PilotoResource {
 	private EquipeService equipeService;
 	
 	@PostMapping
-	public ResponseEntity<Piloto> insert(@RequestBody Piloto piloto){
-		return ResponseEntity.ok(service.salvar(piloto));
+	public ResponseEntity<PilotoDTO> insert(@RequestBody PilotoDTO pilotoDTO){
+		Piloto newPiloto = service.salvar(new Piloto(pilotoDTO));
+		return ResponseEntity.ok(newPiloto.toDto());
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Piloto>> listarTodos(@PathVariable Integer id){
-		return ResponseEntity.ok(service.listAll());
+	public ResponseEntity<List<PilotoDTO>> listarTodos(@PathVariable Integer id){
+		return ResponseEntity.ok(service.listAll().stream().map(piloto -> piloto.toDto()).toList());
 	}
 	
 	@GetMapping ("/{id}")
-	public ResponseEntity<Piloto> buscaPorId(@PathVariable Integer id){
-		return ResponseEntity.ok(service.findById(id));
+	public ResponseEntity<PilotoDTO> buscaPorId(@PathVariable Integer id){
+		Piloto piloto = service.findById(id);
+		return ResponseEntity.ok(piloto.toDto());
 	}
 	
 	@GetMapping ("/nome/{name}")
-	public ResponseEntity<List<Piloto>> buscaPorNome(@PathVariable String name){
-		return ResponseEntity.ok(service.findByNameIgnoreCase(name));
+	public ResponseEntity<List<PilotoDTO>> buscaPorNome(@PathVariable String name){
+		return ResponseEntity.ok(service.findByNameIgnoreCase(name).stream().map(piloto -> piloto.toDto()).toList());
 	}
 	
 	@GetMapping ("/nome/contem/{name}")
-	public ResponseEntity<List<Piloto>> buscaPorNomeContem(@PathVariable String name){
-		return ResponseEntity.ok(service.findByNameContains(name));
+	public ResponseEntity<List<PilotoDTO>> buscaPorNomeContem(@PathVariable String name){
+		return ResponseEntity.ok(service.findByNameContains(name).stream().map(piloto -> piloto.toDto()).toList());
 	}
 	
 	@GetMapping ("/equipe/{equipe}")
-	public ResponseEntity<List<Piloto>> buscaPorEquipe(@PathVariable Integer id_equipe){
-		return ResponseEntity.ok(service.findByEquipe(equipeService.findById(id_equipe))) ;
+	public ResponseEntity<List<PilotoDTO>> buscaPorEquipe(@PathVariable Integer id_equipe){
+		return ResponseEntity.ok(service.findByEquipe(equipeService.findById(id_equipe)).stream().map(piloto -> piloto.toDto()).toList());
 	}
 	
 	@GetMapping ("/pais/{pais}")
-	public ResponseEntity<List<Piloto>> buscaPoPais(@PathVariable Integer id_pais){
-		return ResponseEntity.ok(service.findByPais(paisService.findById(id_pais)));
+	public ResponseEntity<List<PilotoDTO>> buscaPoPais(@PathVariable Integer id_pais){
+		return ResponseEntity.ok(service.findByPais(paisService.findById(id_pais)).stream().map(piloto -> piloto.toDto()).toList());
 	}
 	
 	@PutMapping ("/{id}")
-	public ResponseEntity<Piloto> udate(@PathVariable Integer id, @RequestBody Piloto piloto){
-		paisService.findById(piloto.getPais().getId());
-		equipeService.findById(piloto.getEquipe().getId());
+	public ResponseEntity<PilotoDTO> udate(@PathVariable Integer id, @RequestBody PilotoDTO pilotoDTO){
+		Piloto piloto = new Piloto(pilotoDTO);
 		piloto.setId(id);
-		return ResponseEntity.ok(service.update(piloto));
+		piloto = service.update(piloto);
+		return ResponseEntity.ok(piloto.toDto());
 	}
 	
 	@DeleteMapping ("/{id}")

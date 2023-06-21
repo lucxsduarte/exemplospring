@@ -6,7 +6,6 @@ import br.com.trier.springmatutino.domain.Equipe;
 import br.com.trier.springmatutino.domain.Pais;
 import br.com.trier.springmatutino.domain.Piloto;
 
-
 public interface PilotoService {
 
 	Piloto salvar (Piloto piloto);

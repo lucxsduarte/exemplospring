@@ -22,7 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import br.com.trier.springmatutino.SpringMatutinoApplication;
-import br.com.trier.springmatutino.domain.dto.EquipeDTO;
+import br.com.trier.springmatutino.domain.Equipe;
 
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = Replace.ANY)
@@ -38,9 +38,9 @@ public class EquipeResourceTest {
 	@Sql(scripts="classpath:/resources/sqls/equipe.sql")
 	public void testFindByID() {
 		
-		ResponseEntity<EquipeDTO> responseEntity = rest.getForEntity(
+		ResponseEntity<Equipe> responseEntity = rest.getForEntity(
 				"/equipe/1",
-				EquipeDTO.class
+				Equipe.class
         );
 		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
 	}
@@ -55,14 +55,14 @@ public class EquipeResourceTest {
 	    headers.setContentType(MediaType.APPLICATION_JSON);
 	    HttpEntity<String> entity = new HttpEntity<>(headers);
 		String nomeEquipe = "Lotus";
-		ResponseEntity<List<EquipeDTO>> responseEntity = rest.exchange(
+		ResponseEntity<List<Equipe>> responseEntity = rest.exchange(
 				"/equipe/name/" + nomeEquipe,
                 HttpMethod.GET,
                 entity,
-                new ParameterizedTypeReference<List<EquipeDTO>>() {}
+                new ParameterizedTypeReference<List<Equipe>>() {}
         );
 		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
-		List<EquipeDTO> equipe = responseEntity.getBody();
+		List<Equipe> equipe = responseEntity.getBody();
 	    assertEquals(1, equipe.size());
 	}
 	
@@ -75,14 +75,14 @@ public class EquipeResourceTest {
 	    headers.setContentType(MediaType.APPLICATION_JSON);
 	    HttpEntity<String> entity = new HttpEntity<>(headers);
 		String contem = "a";
-		ResponseEntity<List<EquipeDTO>> responseEntity = rest.exchange(
+		ResponseEntity<List<Equipe>> responseEntity = rest.exchange(
 				"/equipe/name/contem/" + contem,
                 HttpMethod.GET,
                 entity,
-                new ParameterizedTypeReference<List<EquipeDTO>>() {}
+                new ParameterizedTypeReference<List<Equipe>>() {}
         );
 		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
-		List<EquipeDTO> equipe = responseEntity.getBody();
+		List<Equipe> equipe = responseEntity.getBody();
 	    assertEquals(1, equipe.size());
 	}
 	 
@@ -91,9 +91,9 @@ public class EquipeResourceTest {
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	@Sql(scripts="classpath:/resources/sqls/equipe.sql")
 	public void testFindByNotFoundID() {
-		ResponseEntity<EquipeDTO> responseEntity = rest.getForEntity(
+		ResponseEntity<Equipe> responseEntity = rest.getForEntity(
 				"/equipe/100",
-				EquipeDTO.class
+				Equipe.class
         );
 		assertEquals(responseEntity.getStatusCode(), HttpStatus.NOT_FOUND);
 	}
@@ -103,14 +103,14 @@ public class EquipeResourceTest {
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	@Sql(scripts="classpath:/resources/sqls/equipe.sql")
 	public void testListAll() {
-		ResponseEntity<List<EquipeDTO>> responseEntity = rest.exchange(
+		ResponseEntity<List<Equipe>> responseEntity = rest.exchange(
 				"/equipe",
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<EquipeDTO>>() {}
+                new ParameterizedTypeReference<List<Equipe>>() {}
         );
 		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
-		List<EquipeDTO> equipe = responseEntity.getBody();
+		List<Equipe> equipe = responseEntity.getBody();
 	    assertEquals(4, equipe.size());
 	}
 	
@@ -118,19 +118,19 @@ public class EquipeResourceTest {
 	@DisplayName("teste cadastra equipe")
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	public  void testCreatePais() {
-		EquipeDTO dto = new EquipeDTO(null, "Equipe nova");
+		Equipe dto = new Equipe(null, "Equipe nova");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<EquipeDTO> requestEntity = new HttpEntity<>(dto, headers);
+		HttpEntity<Equipe> requestEntity = new HttpEntity<>(dto, headers);
 		
-		ResponseEntity<EquipeDTO> responseEntity = rest.exchange(
+		ResponseEntity<Equipe> responseEntity = rest.exchange(
 				"/equipe",
                 HttpMethod.POST,
                 requestEntity,
-                EquipeDTO.class
+                Equipe.class
         );
 		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
-		EquipeDTO equipe = responseEntity.getBody();
+		Equipe equipe = responseEntity.getBody();
 	    assertEquals("Equipe nova", equipe.getName());
 	}
 	
@@ -139,19 +139,19 @@ public class EquipeResourceTest {
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	@Sql(scripts="classpath:/resources/sqls/equipe.sql")
 	public  void testUpdatePais() {
-		EquipeDTO dto = new EquipeDTO(1, "Equipe nova");
+		Equipe dto = new Equipe(1, "Equipe nova");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<EquipeDTO> requestEntity = new HttpEntity<>(dto, headers);
+		HttpEntity<Equipe> requestEntity = new HttpEntity<>(dto, headers);
 		
-		ResponseEntity<EquipeDTO> responseEntity = rest.exchange(
+		ResponseEntity<Equipe> responseEntity = rest.exchange(
 				"/equipe/1",
                 HttpMethod.PUT,
                 requestEntity,
-                EquipeDTO.class
+                Equipe.class
         );
 		assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
-		EquipeDTO equipe = responseEntity.getBody();
+		Equipe equipe = responseEntity.getBody();
 	    assertEquals("Equipe nova", equipe.getName());
 	}
 	
