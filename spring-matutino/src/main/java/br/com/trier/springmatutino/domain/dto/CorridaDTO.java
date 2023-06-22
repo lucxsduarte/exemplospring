@@ -1,9 +1,6 @@
 package br.com.trier.springmatutino.domain.dto;
 
-import java.time.ZonedDateTime;
 
-import br.com.trier.springmatutino.domain.Campeonato;
-import br.com.trier.springmatutino.domain.Pista;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,9 +12,13 @@ public class CorridaDTO {
 
 	private Integer id;
 	
-	private ZonedDateTime data;
+	private String data;
 	
-	private Pista pista;
+	private Integer id_pista;
 	
-	private Campeonato campeonato;
+	private Integer tamanho_pista;
+	
+	private Integer id_campeonato;
+	
+	private String desc_camp;
 }

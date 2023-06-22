@@ -47,7 +47,7 @@ public class EquipeServiceTest extends BaseTests{
 		assertEquals(1, lista.size());
 		assertEquals("Mercedes", lista.get(0).getName());
 		lista = equipeService.findByNameContainsIgnoreCase("e");
-		assertEquals(3, lista.size());
+		assertEquals(4, lista.size());
 	}
 	
 	@Test
@@ -63,7 +63,7 @@ public class EquipeServiceTest extends BaseTests{
 	@Sql({"classpath:/resources/sqls/equipe.sql"})
 	void listAllTest() {
 		var lista = equipeService.listAll();
-		assertEquals(4, lista.size());
+		assertEquals(5, lista.size());
 	}
 	
 	@Test
@@ -102,7 +102,7 @@ public class EquipeServiceTest extends BaseTests{
 		var equipeNova = equipeService.findById(1);
 		assertEquals(1, lista.get(0).getId());
 		assertEquals("Equipe Nova", equipeNova.getName());
-		assertEquals(4, lista.size());
+		assertEquals(5, lista.size());
 	}
 	
 	@Test
@@ -127,14 +127,14 @@ public class EquipeServiceTest extends BaseTests{
 	void deleteEquipeTest() {
 		equipeService.delete(1);
 		var lista = equipeService.listAll();
-		assertEquals(3, lista.size());
+		assertEquals(4, lista.size());
 	}
 	
 	@Test
 	@DisplayName ("Teste deleta equipe não existente")
 	@Sql({"classpath:/resources/sqls/equipe.sql"})
 	void deleteEquipeNonExistentTest() {
-		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> equipeService.delete(5));
-		assertEquals("Equipe 5 não encontrada", exception.getMessage());
+		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> equipeService.delete(6));
+		assertEquals("Equipe 6 não encontrada", exception.getMessage());
 	}
 }

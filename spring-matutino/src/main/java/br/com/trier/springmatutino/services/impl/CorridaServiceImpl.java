@@ -1,6 +1,5 @@
 package br.com.trier.springmatutino.services.impl;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -22,9 +21,14 @@ public class CorridaServiceImpl implements CorridaService{
 	CorridaRepository repository;
 	
 	private void validaData(Corrida corrida) {
-		ZonedDateTime dataAtual = ZonedDateTime.now(ZoneId.systemDefault());
-		if(corrida.getData() == null || corrida.getData().isBefore(dataAtual)) {
+		if(corrida.getData() == null) {
 			throw new ViolacaoIntegridade("Data inválida");
+		}
+		if(corrida.getCampeonato() == null) {
+			throw new ViolacaoIntegridade("Campeonato não pode ser nulo");
+		}
+		if(corrida.getData().getYear() != corrida.getCampeonato().getAno()) {
+			throw new ViolacaoIntegridade("Ano da corrida diferente do ano do campeonato");
 		}
 	}
 

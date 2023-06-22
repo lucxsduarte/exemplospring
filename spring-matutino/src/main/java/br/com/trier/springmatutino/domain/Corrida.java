@@ -1,14 +1,21 @@
 package br.com.trier.springmatutino.domain;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.hibernate.usertype.internal.ZonedDateTimeCompositeUserType.ZonedDateTimeEmbeddable;
 
 import br.com.trier.springmatutino.domain.dto.CorridaDTO;
+import br.com.trier.springmatutino.utils.DateUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -32,16 +39,30 @@ public class Corrida {
 	private ZonedDateTime data;
 	
 	@ManyToOne
+	@NotNull
 	private Pista pista;
 	
 	@ManyToOne
+	@NotNull
 	private Campeonato campeonato;
 	
-	public Corrida (CorridaDTO dto) {
-		this(dto.getId(), dto.getData(), dto.getPista(), dto.getCampeonato());
+	public CorridaDTO toDTO() {
+		return  new CorridaDTO(id, DateUtils.zoneDateTimeToStr(data), pista.getId(),pista.getTamanho(), campeonato.getId(), campeonato.getDescription());
 	}
 	
-	public CorridaDTO toDto() {
-		return new CorridaDTO(this.id, this.data, this.pista, this.campeonato);
+	public Corrida (CorridaDTO dto) {
+		 this(  dto.getId(),
+				DateUtils.strToZonedDateTime(dto.getData()),
+				new Pista(dto.getId_pista(),null, null),
+				new Campeonato(dto.getId_campeonato(), null, null));
 	}
+	
+	public Corrida (CorridaDTO dto, Pista pista, Campeonato camp) {
+		 this(  dto.getId(),
+				DateUtils.strToZonedDateTime(dto.getData()),
+				pista,
+				camp);
+	}
+
+	
 }

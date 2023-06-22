@@ -29,7 +29,7 @@ public class CampeonatoServiceTest extends BaseTests{
 		var lista = campService.findByDescriptionIgnoreCase("campeonato 1");
 		assertEquals("Campeonato 1", lista.get(0).getDescription());
 		lista = campService.findByDescriptionContainsIgnoreCase("nato");
-		assertEquals(4, lista.size());
+		assertEquals(5, lista.size());
 		assertEquals(1, lista.get(0).getId());
 	}
 	
@@ -134,7 +134,7 @@ public class CampeonatoServiceTest extends BaseTests{
 	void deleteCamp() {
 		campService.delete(1);
 		var lista = campService.listAll();
-		assertEquals(3, lista.size());
+		assertEquals(4, lista.size());
 	}
 	
 	@Test
@@ -150,7 +150,7 @@ public class CampeonatoServiceTest extends BaseTests{
 	@Sql({"classpath:/resources/sqls/camp.sql"})
 	void listAllTest() {
 		var lista = campService.listAll();
-		assertEquals(4, lista.size());
+		assertEquals(5, lista.size());
 	}
 	
 	@Test

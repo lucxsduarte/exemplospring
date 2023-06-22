@@ -29,7 +29,7 @@ public class PaisServiceTest extends BaseTests{
 		assertEquals(1, lista.size());
 		assertEquals("Brasil", lista.get(0).getName());
 		lista = paisService.findByNameContains("a");
-		assertEquals(2, lista.size());
+		assertEquals(5, lista.size());
 	}
 	
 	@Test
@@ -64,7 +64,7 @@ public class PaisServiceTest extends BaseTests{
 	void listAllPaisTest() {
 		var lista = paisService.listAll();
 		assertTrue(lista != null);
-		assertEquals(2, lista.size());
+		assertEquals(5, lista.size());
 	}
 	
 	@Test
@@ -116,8 +116,8 @@ public class PaisServiceTest extends BaseTests{
 	@DisplayName ("Teste update pais inexistente")
 	@Sql({"classpath:/resources/sqls/pais.sql"})
 	void updatePaisNonExistentrTest() {
-		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> paisService.update(new Pais(4,"Equador")));
-		assertEquals("Pais 4 não encontrado", exception.getMessage());
+		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> paisService.update(new Pais(7,"Equador")));
+		assertEquals("Pais 7 não encontrado", exception.getMessage());
 	}
 	
 	@Test
@@ -127,7 +127,7 @@ public class PaisServiceTest extends BaseTests{
 		paisService.delete(1);
 		var lista = paisService.listAll();
 		var pais = paisService.findById(2);
-		assertEquals(1, lista.size());
+		assertEquals(4, lista.size());
 		assertEquals("Bolivia", pais.getName());
 	}
 	
@@ -137,7 +137,7 @@ public class PaisServiceTest extends BaseTests{
 	void deletePaisNonExistentTest() {
 		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> paisService.delete(10));
 		var lista = paisService.listAll();
-		assertEquals(2, lista.size());
+		assertEquals(5, lista.size());
 		assertEquals("Pais 10 não encontrado", exception.getMessage());
 	}
 }
