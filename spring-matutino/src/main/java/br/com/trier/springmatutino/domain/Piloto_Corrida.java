@@ -37,7 +37,7 @@ public class Piloto_Corrida {
 	private Integer colocacao;
 	
 	public Piloto_CorridaDTO toDTO() {
-		return new Piloto_CorridaDTO(id, piloto.getId(), piloto.getName(), piloto.getEquipe().getName(), piloto.getPais().getName(), 
+		return new Piloto_CorridaDTO(id, piloto.getId(), piloto.getName(), piloto.getEquipe().getId(), piloto.getEquipe().getName(),piloto.getPais().getId(), piloto.getPais().getName(), 
 				corrida.getId(), DateUtils.zoneDateTimeToStr(corrida.getData()), corrida.getPista().getId(), corrida.getPista().getTamanho(), 
 				corrida.getCampeonato().getId(), corrida.getCampeonato().getDescription(), 
 				colocacao);

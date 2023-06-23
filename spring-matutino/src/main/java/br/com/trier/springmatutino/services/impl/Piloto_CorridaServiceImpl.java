@@ -1,7 +1,6 @@
 package br.com.trier.springmatutino.services.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +11,7 @@ import br.com.trier.springmatutino.domain.Piloto_Corrida;
 import br.com.trier.springmatutino.repositories.Piloto_CorridaRepository;
 import br.com.trier.springmatutino.services.Piloto_CorridaService;
 import br.com.trier.springmatutino.services.exceptions.ObjetoNaoEncontrado;
+import br.com.trier.springmatutino.services.exceptions.ViolacaoIntegridade;
 
 @Service
 public class Piloto_CorridaServiceImpl implements Piloto_CorridaService{
@@ -19,8 +19,18 @@ public class Piloto_CorridaServiceImpl implements Piloto_CorridaService{
 	@Autowired
 	Piloto_CorridaRepository repository;
 	
+	private void validaPilotoCorrida(Piloto_Corrida piloto_corrida) {
+		if(piloto_corrida.getColocacao() == null){
+			throw new ViolacaoIntegridade("Colocacao nula!");
+		}
+		if(piloto_corrida.getColocacao() == 0) {
+			throw new ViolacaoIntegridade("Colocacao zero!");
+		}
+	}
+	
 	@Override
 	public Piloto_Corrida salvar(Piloto_Corrida piloto_corrida) {
+		validaPilotoCorrida(piloto_corrida);
 		return repository.save(piloto_corrida);
 	}
 
@@ -41,6 +51,7 @@ public class Piloto_CorridaServiceImpl implements Piloto_CorridaService{
 	@Override
 	public Piloto_Corrida update(Piloto_Corrida piloto_corrida) {
 		findById(piloto_corrida.getId());
+		validaPilotoCorrida(piloto_corrida);
 		return repository.save(piloto_corrida);
 	}
 

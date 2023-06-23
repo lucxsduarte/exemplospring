@@ -37,7 +37,7 @@ public class PilotoResource {
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<PilotoDTO>> listarTodos(@PathVariable Integer id){
+	public ResponseEntity<List<PilotoDTO>> listarTodos(){
 		return ResponseEntity.ok(service.listAll().stream().map(piloto -> piloto.toDto()).toList());
 	}
 	

@@ -1,6 +1,5 @@
 package br.com.trier.springmatutino.domain;
 
-
 import br.com.trier.springmatutino.domain.dto.PilotoDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,30 +16,34 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode (of = "id")
-@Entity (name = "piloto")
+@EqualsAndHashCode(of = "id")
+@Entity(name = "piloto")
 public class Piloto {
-	
+
 	@Id
-	@GeneratedValue (strategy = GenerationType.IDENTITY)
-	@Column (name = "id_piloto")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_piloto")
 	@Setter
 	private Integer id;
-	
-	@Column (name = "name_piloto")
+
+	@Column(name = "name_piloto")
 	private String name;
-	
+
 	@ManyToOne
 	private Pais pais;
-	
+
 	@ManyToOne
 	private Equipe equipe;
-	
-	public Piloto (PilotoDTO dto) {
-		this(dto.getId(), dto.getName(), dto.getPais(), dto.getEquipe());
+
+	public Piloto(PilotoDTO dto) {
+		this(dto.getId(), dto.getName(), new Pais(dto.getId_pais(), null), new Equipe(dto.getId_equipe(), null));
 	}
-	
+
+	public Piloto(PilotoDTO dto, Pais pais, Equipe equipe) {
+		this(dto.getId(), dto.getName(), pais, equipe);
+	}
+
 	public PilotoDTO toDto() {
-		return new PilotoDTO(this.id, this.name, this.pais, this.equipe);
+		return new PilotoDTO(id, name, pais.getId(), pais.getName(), equipe.getId(), equipe.getName());
 	}
 }

@@ -1,5 +1,7 @@
 package br.com.trier.springmatutino.domain.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,17 +9,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PilotoDTO {
+public class CorridasPorCampeonato {
 
-	private Integer id;
+	private String desc_camp;
 	
-	private String name;
-	
-	private Integer id_pais;
-	
-	private String name_pais;
-	
-	private Integer id_equipe;
-	
-	private String name_equipe;
+	private List<CorridaDTO> corridas;
 }

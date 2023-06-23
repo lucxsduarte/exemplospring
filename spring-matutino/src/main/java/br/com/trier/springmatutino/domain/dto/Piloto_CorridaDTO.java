@@ -15,7 +15,11 @@ public class Piloto_CorridaDTO {
 	
 	private String name_piloto;
 	
+	private Integer id_equipe;
+	
 	private String equipe_piloto;
+	
+	private Integer id_pais;
 	
 	private String pais_piloto;
 	
