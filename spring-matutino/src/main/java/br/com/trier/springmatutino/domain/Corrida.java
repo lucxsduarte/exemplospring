@@ -1,11 +1,6 @@
 package br.com.trier.springmatutino.domain;
 
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.hibernate.usertype.internal.ZonedDateTimeCompositeUserType.ZonedDateTimeEmbeddable;
 
 import br.com.trier.springmatutino.domain.dto.CorridaDTO;
 import br.com.trier.springmatutino.utils.DateUtils;
