@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.trier.springmatutino.domain.Campeonato;
 import br.com.trier.springmatutino.domain.Corrida;
 import br.com.trier.springmatutino.domain.Pais;
-import br.com.trier.springmatutino.domain.dto.ColocacaoPorCorrida;
 import br.com.trier.springmatutino.domain.dto.CorridaDTO;
 import br.com.trier.springmatutino.domain.dto.CorridaPaisAnoDTO;
 import br.com.trier.springmatutino.domain.dto.CorridasPorCampeonato;
@@ -37,6 +37,7 @@ public class RelatorioResource {
 	@Autowired
 	private CampeonatoService campService;
 	
+	@Secured({"ROLE_ADMIN"})
 	@GetMapping ("/corrida-por-pais-ano/{paisId}/{ano}")
 	public ResponseEntity<CorridaPaisAnoDTO>  findCorridaPorPaisEAno(@PathVariable Integer paisId, @PathVariable Integer ano){
 		Pais pais = paisService.findById(paisId);
@@ -55,6 +56,7 @@ public class RelatorioResource {
 		return ResponseEntity.ok(new CorridaPaisAnoDTO(ano, pais.getName(), corridasDTOS));
 	}
 	
+	@Secured({"ROLE_ADMIN"})
 	@GetMapping ("corrida-por-campeonato/{campId}")
 	public ResponseEntity<CorridasPorCampeonato> findCorridasPorCampeonato(@PathVariable Integer campId){
 		Campeonato camp = campService.findById(campId);

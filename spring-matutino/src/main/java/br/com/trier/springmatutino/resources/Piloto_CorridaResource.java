@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class Piloto_CorridaResource {
 	@Autowired
 	private CorridaService corridaService;
 	
+	@Secured({"ROLE_ADMIN"})
 	@PostMapping
 	public ResponseEntity<Piloto_CorridaDTO> insert (@RequestBody Piloto_CorridaDTO piloto_corridaDTO){
 		return ResponseEntity.ok(service.salvar(new Piloto_Corrida(
@@ -42,51 +44,61 @@ public class Piloto_CorridaResource {
 				.toDTO());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping
 	public ResponseEntity<List<Piloto_CorridaDTO>> listarTodos(){
 		return ResponseEntity.ok(service.listAll().stream().map(pilotoC -> pilotoC.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping ("/{id}")
 	public ResponseEntity<Piloto_CorridaDTO> buscaPorId(@PathVariable Integer id){
 		return ResponseEntity.ok(service.findById(id).toDTO());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/piloto/{piloto}")
 	public ResponseEntity<List<Piloto_CorridaDTO>> buscaPorPiloto (@PathVariable Integer id_piloto){
 		return ResponseEntity.ok(service.findByPiloto(pilotoService.findById(id_piloto)).stream().map(pilotoC -> pilotoC.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/corrida/{corrida}")
 	public ResponseEntity<List<Piloto_CorridaDTO>> buscaPorCorrida (@PathVariable Integer id_corrida){
 		return ResponseEntity.ok(service.findByCorrida(corridaService.findById(id_corrida)).stream().map(pilotoC -> pilotoC.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/colocacao/{colocacao}")
 	public ResponseEntity<List<Piloto_CorridaDTO>> buscaPorColocacao (@PathVariable Integer colocacao){
 		return ResponseEntity.ok(service.findByColocacao(colocacao).stream().map(pilotoC -> pilotoC.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/colocacao/entre/{colocacao1}/{colocacao2}/{corrida}")
 	public ResponseEntity<List<Piloto_CorridaDTO>> buscaPorColocacaoEntre (@PathVariable Integer colocacao1, @PathVariable Integer colocacao2, @PathVariable Integer id_corrida){
 		return ResponseEntity.ok(service.findByColocacaoBetweenAndCorrida(colocacao1, colocacao2, corridaService.findById(id_corrida)).stream().map(pilotoC -> pilotoC.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/colocacao/menor/{colocacao}/{corrida}")
 	public ResponseEntity<List<Piloto_CorridaDTO>> buscaPorColocacaoMenor (@PathVariable Integer colocacao, @PathVariable Integer id_corrida){
 		return ResponseEntity.ok(service.findByColocacaoLessThanEqualAndCorrida(colocacao, corridaService.findById(id_corrida)).stream().map(pilotoC -> pilotoC.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/colocacao/maior/{colocacao}/{corrida}")
 	public ResponseEntity<List<Piloto_CorridaDTO>> buscaPorColocacaoMaior (@PathVariable Integer colocacao, @PathVariable Integer id_corrida){
 		return ResponseEntity.ok(service.findByColocacaoGreaterThanEqualAndCorrida(colocacao, corridaService.findById(id_corrida)).stream().map(pilotoC -> pilotoC.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/colocacao/corrida/{colocacao}/{corrida}")
 	public ResponseEntity<List<Piloto_CorridaDTO>> buscaPorColocacaoCorrida (@PathVariable Integer colocacao, @PathVariable Integer id_corrida){
 		return ResponseEntity.ok(service.findByColocacaoAndCorrida(colocacao, corridaService.findById(id_corrida)).stream().map(pilotoC -> pilotoC.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_ADMIN"})
 	@PutMapping("/{id}")
 	public ResponseEntity<Piloto_CorridaDTO> update (@PathVariable Integer id, @RequestBody Piloto_CorridaDTO piloto_corridaDTO){
 		Corrida corrida = corridaService.findById(piloto_corridaDTO.getId_corrida());
@@ -96,6 +108,7 @@ public class Piloto_CorridaResource {
 		return ResponseEntity.ok(service.update(pilotoCorrida).toDTO());
 	}
 	
+	@Secured({"ROLE_ADMIN"})
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete (@PathVariable Integer id){
 		service.delete(id);

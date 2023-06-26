@@ -60,7 +60,7 @@ public class UserServiceTest extends BaseTests{
 	@Test
 	@DisplayName("Teste cadastra usuario")
 	void insertUserTest()	{
-		var usuario = new User(null, "Lucas", "lucas@gmail.com", "123");
+		var usuario = new User(null, "Lucas", "lucas@gmail.com", "123", "ADMIN");
 		userService.salvar(usuario);
 		var lista = userService.listAll();
 		assertEquals(1, lista.size());
@@ -69,9 +69,9 @@ public class UserServiceTest extends BaseTests{
 	@Test
 	@DisplayName("Teste cadastra usuario email repetido")
 	void insertUserEmailErrorTest()	{
-		userService.salvar(new User(null, "Lucas", "lucas@gmail.com", "123"));
+		userService.salvar(new User(null, "Lucas", "lucas@gmail.com", "123", "ADMIN"));
 		
-		var exception = assertThrows(ViolacaoIntegridade.class, () -> userService.salvar(new User(null, "usu2", "lucas@gmail.com", "123")));
+		var exception = assertThrows(ViolacaoIntegridade.class, () -> userService.salvar(new User(null, "usu2", "lucas@gmail.com", "123", "ADMIN")));
 		assertEquals("Email já cadastrado: lucas@gmail.com", exception.getMessage());
 	}
 	
@@ -79,7 +79,7 @@ public class UserServiceTest extends BaseTests{
 	@DisplayName("Teste altera usuario")
 	@Sql({"classpath:/resources/sqls/usuarios.sql"})
 	void updateUserTest()	{
-		var usuario = new User(1, "altera", "altera", "altera");
+		var usuario = new User(1, "altera", "altera", "altera", "ADMIN");
 		userService.update(usuario);
 		var usuarioAlterado = userService.findById(1);
 		assertEquals(1, usuario.getId());
@@ -92,7 +92,7 @@ public class UserServiceTest extends BaseTests{
 	@DisplayName("Teste altera usuario com email repetido")
 	@Sql({"classpath:/resources/sqls/usuarios.sql"})
 	void updateUserEmailErrorTest()	{
-		var exception = assertThrows(ViolacaoIntegridade.class, () -> userService.update(new User(2, "Usuario teste 2", "test1@test.com.br", "123")));
+		var exception = assertThrows(ViolacaoIntegridade.class, () -> userService.update(new User(2, "Usuario teste 2", "test1@test.com.br", "123", "ADMIN")));
 		assertEquals("Email já cadastrado: test1@test.com.br", exception.getMessage());
 	}
 	
@@ -100,7 +100,7 @@ public class UserServiceTest extends BaseTests{
 	@DisplayName("Teste altera usuario inexistente")
 	@Sql({"classpath:/resources/sqls/usuarios.sql"})
 	void updateUserNonExistentTest()	{
-		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> userService.update(new User(4, "Usuario teste 4", "test4@test.com.br", "123")));
+		var exception = assertThrows(ObjetoNaoEncontrado.class, () -> userService.update(new User(4, "Usuario teste 4", "test4@test.com.br", "123", "ADMIN")));
 		assertEquals("Usuário 4 não encontrado", exception.getMessage());
 	}
 	
