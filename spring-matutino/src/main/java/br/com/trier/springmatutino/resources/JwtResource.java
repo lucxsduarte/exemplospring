@@ -25,7 +25,6 @@ public class JwtResource {
 
 	@PostMapping("/token")
 	public String authenticateAndGetToken(@RequestBody LoginDTO loginDto) {
-		System.out.println("MENSAGEM " + new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
 		Authentication authentication = auth.authenticate(
 				new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
 		if (authentication.isAuthenticated()) {

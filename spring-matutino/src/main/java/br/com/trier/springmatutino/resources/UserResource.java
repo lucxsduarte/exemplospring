@@ -50,7 +50,7 @@ public class UserResource {
 		User user = new User(userDTO);
 		user.setId(id);
 		user = service.update(user);
-		return user != null ? ResponseEntity.ok(user.toDto()) : ResponseEntity.badRequest().build();
+		return ResponseEntity.ok(user.toDto());
 	}
 	
 	@Secured({"ROLE_ADMIN"})

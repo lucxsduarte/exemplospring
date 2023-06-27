@@ -154,7 +154,7 @@ public class CampeonatoResourceTest {
 	@Test
 	@DisplayName("teste cadastra campeonato")
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
-	public  void testCreatePais() {
+	public  void testCreateCamp() {
 		CampeonatoDTO dto = new CampeonatoDTO(null, "Campeonato Novo", 2020);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -175,7 +175,7 @@ public class CampeonatoResourceTest {
 	@DisplayName("teste update campeonato")
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	@Sql(scripts="classpath:/resources/sqls/camp.sql")
-	public  void testUpdatePais() {
+	public  void testUpdateCamp() {
 		CampeonatoDTO dto = new CampeonatoDTO(1, "Campeonato Novo", 2020);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -196,7 +196,7 @@ public class CampeonatoResourceTest {
 	@DisplayName("teste delete campeonato")
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	@Sql(scripts="classpath:/resources/sqls/camp.sql")
-	public void testDeletePais() {
+	public void testDeleteCamp() {
 		ResponseEntity<Void> responseEntity = rest.exchange(
 				"/camp/1",
                 HttpMethod.DELETE,
