@@ -18,48 +18,47 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import br.com.trier.springmatutino.SpringMatutinoApplication;
+import br.com.trier.springmatutino.config.jwt.JwtUtil;
 import br.com.trier.springmatutino.config.jwt.LoginDTO;
 import br.com.trier.springmatutino.domain.dto.UserDTO;
 
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = Replace.ANY)
-@Sql(executionPhase=ExecutionPhase.BEFORE_TEST_METHOD,scripts="classpath:/resources/sqls/usuarios.sql")
-@Sql(executionPhase=ExecutionPhase.AFTER_TEST_METHOD,scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 @SpringBootTest(classes = SpringMatutinoApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserResourceTest {
 	
 	@Autowired
 	protected TestRestTemplate rest;
+	@Autowired
+	private AuthenticationManager auth;
+	@Autowired
+	private JwtUtil jwtUtil;
 
 	private ResponseEntity<UserDTO> getUser(String url) {
 		return rest.getForEntity(url, UserDTO.class);
 	}
 	
-	@SuppressWarnings("unused")
-	private ResponseEntity<List<UserDTO>> getUsers(String url) {
-		String token = geraToken();
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.add("Authorization", "Bearer " + geraToken() );
-		HttpEntity<LoginDTO> requestEntity = new HttpEntity<>(loginDTO, headers);
-		
-		return rest.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<UserDTO>>() {
-		});
-	}
+	//public String geraToken() {
+	//	Authentication authentication = auth.authenticate(
+	//			new UsernamePasswordAuthenticationToken("test1@test.com.br", "123"));
+	////	if (authentication.isAuthenticated()) {
+	//		return jwtUtil.generateToken("test1@test.com.br");
+	//	} else {
+	//		throw new UsernameNotFoundException("Usuário inválido");
+	//	}
+	//
+	//}
 	
-	@Test
-	@DisplayName("teste obter token")
-	@Sql(scripts = "classpath:/resources/sqls/limpa_tabelas.sql")
-	public String geraToken() {
-		LoginDTO loginDTO = new LoginDTO();
-		loginDTO.setEmail("test1@test.com.br");
-		loginDTO.setPassword("123");
-		
+	private String geraToken() {
+		LoginDTO loginDTO = new LoginDTO("test1@test.com.br", "123");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
@@ -72,11 +71,31 @@ public class UserResourceTest {
 		
 		String token = responseEntity.getBody();
 		return token;
+	}
+	
+	@Test
+	@DisplayName("teste obter token")
+	@Sql(scripts = "classpath:/resources/sqls/limpa_tabelas.sql")
+	@Sql(scripts="classpath:/resources/sqls/usuarios.sql")
+	public void obterToken() {
+		LoginDTO loginDTO = new LoginDTO("test1@test.com.br", "123");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 		
+		HttpEntity<LoginDTO> requestEntity = new HttpEntity<>(loginDTO, headers);
+		
+		ResponseEntity<String> responseEntity = rest.exchange("/auth/token", 
+				HttpMethod.POST, 
+				requestEntity, 
+				String.class);
+		
+		String token = responseEntity.getBody();
 	}
 	
 	@Test
 	@DisplayName("teste buscar por id")
+	@Sql(scripts = "classpath:/resources/sqls/limpa_tabelas.sql")
+	@Sql(scripts="classpath:/resources/sqls/usuarios.sql")
 	public void testGetOk() {
 		ResponseEntity<UserDTO> response = getUser("/usuarios/1");
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
@@ -86,6 +105,8 @@ public class UserResourceTest {
 
 	@Test
 	@DisplayName("teste buscar por id inexistente")
+	@Sql(scripts = "classpath:/resources/sqls/limpa_tabelas.sql")
+	@Sql(scripts="classpath:/resources/sqls/usuarios.sql")
 	public void testGetNotFound() {
 		ResponseEntity<UserDTO> response = getUser("/usuarios/100");
 		assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
@@ -93,6 +114,8 @@ public class UserResourceTest {
 	
 	@Test
 	@DisplayName("teste listar todos")
+	@Sql(scripts = "classpath:/resources/sqls/limpa_tabelas.sql")
+	@Sql(scripts="classpath:/resources/sqls/usuarios.sql")
 	public void testListAll() {
 		ResponseEntity<List<UserDTO>> responseEntity = rest.exchange(
 				"/usuarios",
@@ -108,9 +131,8 @@ public class UserResourceTest {
 	@Test
 	@DisplayName("teste cadastrar usuário")
 	@Sql(scripts = "classpath:/resources/sqls/limpa_tabelas.sql")
+	@Sql(scripts="classpath:/resources/sqls/usuarios.sql")
 	public void testCreateUser() {
-		
-		
 		UserDTO dto = new UserDTO(null, "nome", "email", "senha", "ADMIN");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -129,6 +151,8 @@ public class UserResourceTest {
 	
 	@Test
 	@DisplayName("teste update usuário")
+	@Sql(scripts = "classpath:/resources/sqls/limpa_tabelas.sql")
+	@Sql(scripts="classpath:/resources/sqls/usuarios.sql")
 	public void testUpdateUser() {
 		UserDTO dto = new UserDTO(1, "nome", "email@email.com", "senha", "ADMIN");
 		HttpHeaders headers = new HttpHeaders();
