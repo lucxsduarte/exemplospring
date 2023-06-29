@@ -77,7 +77,7 @@ public class PilotoResource {
 	
 	@Secured({"ROLE_ADMIN"})
 	@PutMapping ("/{id}")
-	public ResponseEntity<PilotoDTO> udate(@PathVariable Integer id, @RequestBody PilotoDTO pilotoDTO){
+	public ResponseEntity<PilotoDTO> update(@PathVariable Integer id, @RequestBody PilotoDTO pilotoDTO){
 		Piloto piloto = new Piloto(pilotoDTO);
 		piloto.setId(id);
 		piloto = service.update(piloto);
