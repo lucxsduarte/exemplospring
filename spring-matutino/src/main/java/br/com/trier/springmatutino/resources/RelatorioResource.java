@@ -74,6 +74,4 @@ public class RelatorioResource {
 		return ResponseEntity.ok(new CorridasPorCampeonato(camp.getDescription(), corridasDTOS));
 	}
 	
-	
-	
 }

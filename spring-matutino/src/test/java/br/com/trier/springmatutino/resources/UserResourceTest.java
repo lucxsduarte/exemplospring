@@ -148,7 +148,7 @@ public class UserResourceTest {
 	@Sql(scripts = "classpath:/resources/sqls/limpa_tabelas.sql")
 	@Sql(scripts="classpath:/resources/sqls/usuarios.sql")
 	public void testUpdateUser() {
-		UserDTO dto = new UserDTO(4, "nome", "email@email.com", "senha", "ADMIN");
+		UserDTO dto = new UserDTO(4, "nome", "email@email.com", "senha", "USER");
 		HttpHeaders headers = getHeaders("test1@test.com.br","123");
 		HttpEntity<UserDTO> requestEntity = new HttpEntity<>(dto, headers);
 		ResponseEntity<UserDTO> responseEntity = rest.exchange(
