@@ -42,7 +42,6 @@ public class UserResourceTest {
 				String.class);
 		
 		String token = responseEntity.getBody();
-		System.out.println("**************" + token);
 		headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setBearerAuth(token);
@@ -129,7 +128,6 @@ public class UserResourceTest {
 	@Sql(scripts="classpath:/resources/sqls/usuarios.sql")
 	public void testCreateUser() {
 		UserDTO dto = new UserDTO(null, "nome", "email", "senha", "ADMIN");
-		System.out.println("********INSERT");
 		HttpHeaders headers = getHeaders("teste1@gmail.com", "123");
 		HttpEntity<UserDTO> requestEntity = new HttpEntity<>(dto, headers);
 		ResponseEntity<UserDTO> responseEntity = rest.exchange(
