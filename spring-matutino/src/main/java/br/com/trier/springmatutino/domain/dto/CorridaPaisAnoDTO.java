@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 public class CorridaPaisAnoDTO {
 
 	private Integer ano;
-	
 	private String pais;
-	
 	private List<CorridaDTO> corridas;
 }

@@ -15,26 +15,26 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode (of = "id")
-@Entity(name = "camp" )
+@EqualsAndHashCode(of = "id")
+@Entity(name = "camp")
 public class Campeonato {
-	
+
 	@Id
-	@GeneratedValue (strategy = GenerationType.IDENTITY)
-	@Column (name = "id_camp")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_camp")
 	@Setter
 	private Integer id;
-	
-	@Column (name = "desc_camp")
+
+	@Column(name = "desc_camp")
 	private String description;
-	
-	@Column (name = "ano_camp")
+
+	@Column(name = "ano_camp")
 	private Integer ano;
-	
-	public Campeonato (CampeonatoDTO dto) {
+
+	public Campeonato(CampeonatoDTO dto) {
 		this(dto.getId(), dto.getDescription(), dto.getAno());
 	}
-	
+
 	public CampeonatoDTO toDto() {
 		return new CampeonatoDTO(this.id, this.description, this.ano);
 	}

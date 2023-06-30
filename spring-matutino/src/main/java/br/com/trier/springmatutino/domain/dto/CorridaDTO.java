@@ -10,14 +10,9 @@ import lombok.NoArgsConstructor;
 public class CorridaDTO {
 
 	private Integer id;
-	
 	private String data;
-	
 	private Integer id_pista;
-	
 	private Integer tamanho_pista;
-	
 	private Integer id_campeonato;
-	
 	private String desc_camp;
 }

@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public User salvar(User user) {
-		findByEmail(user);
+		validaEmail(user);
 		return repository.save(user);
 	}
 
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User update(User user) {
 		findById(user.getId());
-		findByEmail(user);
+		validaEmail(user);
 		return repository.save(user);
 	}
 
@@ -52,12 +52,11 @@ public class UserServiceImpl implements UserService{
 		repository.delete(user);
 	}
 	
-	private void findByEmail (User obj) {
-		Optional<User> user = repository.findByEmail(obj.getEmail());
-		if( user != null && user.get().getId() != obj.getId()) {
-			throw new ViolacaoIntegridade("Email já cadastrado: %s".formatted(obj.getEmail()));
-		}
-	}
+	public void validaEmail(User user) {
+        if (repository.findByEmail(user.getEmail()).isPresent()) {
+            throw new ViolacaoIntegridade("O email %s já está sendo usado por outro usuário".formatted(user.getEmail()));
+        }
+    }
 
 	@Override
 	public List<User> findByNameIgnoreCase(String name) {

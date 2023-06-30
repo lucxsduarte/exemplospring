@@ -12,11 +12,7 @@ import br.com.trier.springmatutino.domain.User;
 public interface UserRepository extends JpaRepository<User, Integer>{
 	
 	List<User> findByNameIgnoreCase(String name);
-	
 	List<User> findByNameEndsWith(String name);
-	
 	Optional<User> findByName(String name);
-
 	Optional<User> findByEmail (String email);
-	
 }

@@ -13,5 +13,4 @@ public interface PaisService {
 	void delete(Integer id);
 	List<Pais> findByNameIgnoreCase(String name);
 	List<Pais> findByNameContains(String name);
-	
 }

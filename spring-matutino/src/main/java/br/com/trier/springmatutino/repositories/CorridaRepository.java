@@ -14,10 +14,7 @@ import br.com.trier.springmatutino.domain.Pista;
 public interface CorridaRepository extends JpaRepository<Corrida, Integer>{
 
 	List<Corrida> findByPista(Pista pista);
-	
 	List<Corrida> findByCampeonato(Campeonato campeonato);
-	
 	List<Corrida> findByData(ZonedDateTime data);
-	
 	List<Corrida> findByDataBetween(ZonedDateTime data1, ZonedDateTime data2);
 }

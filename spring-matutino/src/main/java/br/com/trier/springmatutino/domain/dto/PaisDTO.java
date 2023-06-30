@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 public class PaisDTO {
 
 	private Integer id;
-	
 	private String name;
 }

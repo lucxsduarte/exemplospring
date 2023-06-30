@@ -7,17 +7,10 @@ import br.com.trier.springmatutino.domain.User;
 public interface UserService {
 	
 	User salvar (User user);
-	
 	List<User> listAll();
-	
 	User findById(Integer id);
-
 	User update(User user);
-	
 	void delete(Integer id);
-	
 	List<User> findByNameIgnoreCase(String name);
-	
 	List<User> findByNameEndsWith(String name);
-	
 }

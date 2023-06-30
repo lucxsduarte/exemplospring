@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 public class CampeonatoDTO {
 
 	private Integer id;
-	
 	private String description;
-	
 	private Integer ano;
 }

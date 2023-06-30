@@ -10,10 +10,7 @@ import lombok.NoArgsConstructor;
 public class PodioDTO {
 
 	private String name_piloto;
-	
 	private String pais_piloto;
-	
 	private String equipe_piloto;
-	
 	private Integer colocacao;
 }

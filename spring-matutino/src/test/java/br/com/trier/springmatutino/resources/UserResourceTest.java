@@ -53,7 +53,7 @@ public class UserResourceTest {
 		return rest.exchange(
 				url, 
 				HttpMethod.GET, 
-				new HttpEntity<>(getHeaders("test1@test.com.br", "123")),
+				new HttpEntity<>(getHeaders("teste1@gmail.com", "123")),
 				UserDTO.class
 				);
 	}
@@ -62,7 +62,7 @@ public class UserResourceTest {
 		return rest.exchange(
 				url, 
 				HttpMethod.GET, 
-				new HttpEntity<>(getHeaders("test1@test.com.br", "123")),
+				new HttpEntity<>(getHeaders("teste1@gmail.com", "123")),
 				new ParameterizedTypeReference<List<UserDTO>>() {}
 				);
 	}
@@ -116,7 +116,7 @@ public class UserResourceTest {
 		ResponseEntity<List<UserDTO>> responseEntity = rest.exchange(
 				"/usuarios",
                 HttpMethod.GET,
-                new HttpEntity<>(getHeaders("test1@test.com.br", "123")),
+                new HttpEntity<>(getHeaders("teste1@gmail.com", "123")),
                 new ParameterizedTypeReference<List<UserDTO>>() {}
         );
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -130,7 +130,7 @@ public class UserResourceTest {
 	public void testCreateUser() {
 		UserDTO dto = new UserDTO(null, "nome", "email", "senha", "ADMIN");
 		System.out.println("********INSERT");
-		HttpHeaders headers = getHeaders("test1@test.com.br", "123");
+		HttpHeaders headers = getHeaders("teste1@gmail.com", "123");
 		HttpEntity<UserDTO> requestEntity = new HttpEntity<>(dto, headers);
 		ResponseEntity<UserDTO> responseEntity = rest.exchange(
 				"/usuarios",
@@ -149,7 +149,7 @@ public class UserResourceTest {
 	@Sql(scripts="classpath:/resources/sqls/usuarios.sql")
 	public void testUpdateUser() {
 		UserDTO dto = new UserDTO(4, "nome", "email@email.com", "senha", "USER");
-		HttpHeaders headers = getHeaders("test1@test.com.br","123");
+		HttpHeaders headers = getHeaders("teste1@gmail.com","123");
 		HttpEntity<UserDTO> requestEntity = new HttpEntity<>(dto, headers);
 		ResponseEntity<UserDTO> responseEntity = rest.exchange(
 				"/usuarios/4",
@@ -167,7 +167,7 @@ public class UserResourceTest {
 	@Sql(scripts="classpath:/resources/sqls/limpa_tabelas.sql")
 	@Sql(scripts="classpath:/resources/sqls/usuarios.sql")
 	public void testDeleteId() {
-		HttpHeaders headers = getHeaders("test1@test.com.br","123");
+		HttpHeaders headers = getHeaders("teste1@gmail.com","123");
 		HttpEntity<Void> requestEntity = new HttpEntity<>(null, headers);
 		ResponseEntity<Void> responseEntity = rest.exchange(
                 "/usuarios/3",

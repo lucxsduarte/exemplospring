@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 public class CorridasPorCampeonato {
 
 	private String desc_camp;
-	
 	private List<CorridaDTO> corridas;
 }
