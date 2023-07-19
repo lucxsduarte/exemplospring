@@ -25,27 +25,27 @@ public class PaisResouce {
 	@Autowired
 	private PaisService service;
 	
-	@Secured({"ROLE_ADMIN"})
+	//@Secured({"ROLE_ADMIN"})
 	@PostMapping
 	public ResponseEntity<PaisDTO> insert(@RequestBody PaisDTO pais) {
 		Pais newPais = service.salvar(new Pais(pais));
 		return ResponseEntity.ok(newPais.toDto());
 	}
 	
-	@Secured({"ROLE_USER"})
+	//@Secured({"ROLE_USER"})
 	@GetMapping ("/{id}")
 	public ResponseEntity<PaisDTO> buscaPorCodigo(@PathVariable Integer id) {
 		Pais pais = service.findById(id);
 		return ResponseEntity.ok(pais.toDto());
 	}
 	
-	@Secured({"ROLE_USER"})
+	//@Secured({"ROLE_USER"})
 	@GetMapping
 	public ResponseEntity<List<PaisDTO>> listarTodos() {
 		return ResponseEntity.ok(service.listAll().stream().map(pais -> pais.toDto()).toList());
 	}
 	
-	@Secured({"ROLE_ADMIN"})
+	//@Secured({"ROLE_ADMIN"})
 	@PutMapping ("/{id}")
 	public ResponseEntity<PaisDTO> update(@PathVariable Integer id, @RequestBody PaisDTO paisDTO){
 		Pais pais = new Pais(paisDTO);
@@ -54,21 +54,21 @@ public class PaisResouce {
 		return ResponseEntity.ok(pais.toDto());
 	}
 	
-	@Secured({"ROLE_ADMIN"})
+	//@Secured({"ROLE_ADMIN"})
 	@DeleteMapping ("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.delete(id);
 		return ResponseEntity.ok().build();
 	}
 	
-	@Secured({"ROLE_USER"})
+	//@Secured({"ROLE_USER"})
 	@GetMapping ("/name/{name}")
 	public ResponseEntity<List<PaisDTO>> buscaPorNome(@PathVariable String name) {
 		return ResponseEntity.ok(service.findByNameIgnoreCase(name).stream().map(pais -> pais.toDto()).toList());
 		
 	}
 	
-	@Secured({"ROLE_USER"})
+	//@Secured({"ROLE_USER"})
 	@GetMapping ("/name/contem/{name}")
 	public ResponseEntity<List<PaisDTO>> buscaPorNomeContem(@PathVariable String name) {
 		return ResponseEntity.ok(service.findByNameContains(name).stream().map(pais -> pais.toDto()).toList());

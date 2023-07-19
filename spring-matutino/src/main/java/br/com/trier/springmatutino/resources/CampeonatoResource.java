@@ -25,27 +25,27 @@ public class CampeonatoResource {
 	@Autowired
 	private CampeonatoService service;
 	
-	@Secured({"ROLE_ADMIN"})
+	//@Secured({"ROLE_ADMIN"})
 	@PostMapping
 	public ResponseEntity<CampeonatoDTO> insert(@RequestBody CampeonatoDTO campeonato) {
 		Campeonato newCampeonato = service.salvar(new Campeonato(campeonato));
 		return ResponseEntity.ok(newCampeonato.toDto());
 	}
 	
-	@Secured({"ROLE_USER"})
+	//@Secured({"ROLE_USER"})
 	@GetMapping("/{id}")
 	public ResponseEntity<CampeonatoDTO> buscaPorCodigo(@PathVariable Integer id) {
 		Campeonato campeonato = service.findById(id);
 		return ResponseEntity.ok(campeonato.toDto());
 	}
 	
-	@Secured({"ROLE_USER"})
+	//@Secured({"ROLE_USER"})
 	@GetMapping
 	public ResponseEntity<List<CampeonatoDTO>> listarTodos() {
 		return ResponseEntity.ok(service.listAll().stream().map(camp -> camp.toDto()).toList());
 	}
 	
-	@Secured({"ROLE_ADMIN"})
+	//@Secured({"ROLE_ADMIN"})
 	@PutMapping("/{id}")
 	public ResponseEntity<CampeonatoDTO> update(@PathVariable Integer id, @RequestBody CampeonatoDTO campeonatoDTO) {
 		Campeonato campeonato = new Campeonato(campeonatoDTO);
@@ -54,38 +54,38 @@ public class CampeonatoResource {
 		return ResponseEntity.ok(campeonato.toDto());
 	}
 	
-	@Secured({"ROLE_ADMIN"})
+	//@Secured({"ROLE_ADMIN"})
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.delete(id);
 		return ResponseEntity.ok().build();
 	}
 	
-	@Secured({"ROLE_USER"})
+	//@Secured({"ROLE_USER"})
 	@GetMapping("/ano/{ano}")
 	public ResponseEntity<List<CampeonatoDTO>> buscarPorAno(@PathVariable Integer ano) {
 		return ResponseEntity.ok(service.findByAno(ano).stream().map(camp -> camp.toDto()).toList());
 	}
 	
-	@Secured({"ROLE_USER"})
+	//@Secured({"ROLE_USER"})
 	@GetMapping("/ano/entre/{ano1}/{ano2}")
 	public ResponseEntity<List<CampeonatoDTO>> buscaPorAnoEntre(@PathVariable Integer ano1, @PathVariable Integer ano2) {
 		return ResponseEntity.ok(service.findByAnoBetween(ano1, ano2).stream().map(camp -> camp.toDto()).toList());
 	}
 	
-	@Secured({"ROLE_USER"})
+	//@Secured({"ROLE_USER"})
 	@GetMapping ("/desc/{description}")
 	public ResponseEntity<List<CampeonatoDTO>> buscaPorDescriptionIgnoreCase(@PathVariable String description) {
 		return ResponseEntity.ok(service.findByDescriptionIgnoreCase(description).stream().map(camp -> camp.toDto()).toList());
 	}
 	
-	@Secured({"ROLE_USER"})
+	//@Secured({"ROLE_USER"})
 	@GetMapping ("/desc/contem/{description}")
 	public ResponseEntity<List<CampeonatoDTO>> buscaPorDescriptionContem(@PathVariable String description) {
 		return ResponseEntity.ok(service.findByDescriptionContainsIgnoreCase(description).stream().map(camp -> camp.toDto()).toList());
 	}
 	
-	@Secured({"ROLE_USER"})
+	//@Secured({"ROLE_USER"})
 	@GetMapping ("/ano/desc/{description}/{ano}")
 	public ResponseEntity<List<CampeonatoDTO>> buscaPorAnoAndDescription(@PathVariable Integer ano, @PathVariable String description) {
 		return ResponseEntity.ok(service.findByAnoAndDescription(ano, description).stream().map(camp -> camp.toDto()).toList());

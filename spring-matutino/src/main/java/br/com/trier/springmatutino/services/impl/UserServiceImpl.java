@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	public void validaEmail(User user) {
-        if (repository.findByEmail(user.getEmail()).isPresent()) {
+        if (repository.findByEmail(user.getEmail()).isPresent() && !repository.findByEmail(user.getEmail()).orElse(null).getId().equals(user.getId())) {
             throw new ViolacaoIntegridade("O email %s já está sendo usado por outro usuário".formatted(user.getEmail()));
         }
     }
